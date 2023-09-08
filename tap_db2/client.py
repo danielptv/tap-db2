@@ -47,12 +47,25 @@ class DB2Connector(SQLConnector):
         return connection_url
 
     def create_engine(self) -> Engine:
-        return sqlalchemy.create_engine(
-            self.sqlalchemy_url
-            # echo=False,
-            # json_serializer=self.serialize_json,
-            # json_deserializer=self.deserialize_json,
-        )
+        return sqlalchemy.create_engine(self.sqlalchemy_url)
+
+    @staticmethod
+    def to_jsonschema_type(
+        sql_type: (str | sqlalchemy.types.TypeEngine | type[sqlalchemy.types.TypeEngine] | t.Any),  # noqa: ANN401
+    ) -> dict:
+        """Return a JSON Schema representation of the provided type.
+
+        Raises:
+            ValueError: If the type received could not be translated to jsonschema.
+
+        Returns:
+            The JSON Schema representation of the provided type.
+        """
+        # Map DATE to date-time in JSON Schema
+        if isinstance(sql_type, sqlalchemy.DATE):
+            return th.DateTimeType.type_dict
+
+        return SQLConnector.to_jsonschema_type(sql_type)
 
     def discover_catalog_entries(self) -> list[dict]:
         """Return a list of catalog entries from discovery.
