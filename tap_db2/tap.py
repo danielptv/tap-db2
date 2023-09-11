@@ -40,14 +40,15 @@ class TapDB2(SQLTap):
         ),
         th.Property(
             "connection_parameters",
-            th.ArrayType(
-                th.ObjectType(
-                    th.Property("key", th.StringType, required=True, description="The parameter key."),
-                    th.Property("value", th.StringType, required=True, description="The parameter value."),
-                )
-            ),
+            th.ObjectType(),
             required=False,
-            description="Additional parameters to be appended to the connection string. This is an array of objects. Each object must contain the keys 'key' and 'value'.",
+            description="Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.",
+        ),
+        th.Property(
+            "sqlalchemy_execution_options",
+            th.ObjectType(),
+            required=False,
+            description="Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.",
         ),
         th.Property(
             "stream_maps",

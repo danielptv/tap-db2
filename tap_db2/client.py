@@ -41,11 +41,14 @@ class DB2Connector(SQLConnector):
             if "ssl_server_certificate" in config["encryption"]:
                 connection_url += f"SSLServerCertificate={config['encryption']['ssl_server_certificate']};"
         if "connection_parameters" in config:
-            for param in config["connection_parameters"]:
-                connection_url += f"{param['key']}={param['value']};"
+            for key, value in config["connection_parameters"].items():
+                connection_url += f"{key}={value};"
         return connection_url
 
     def create_engine(self) -> Engine:
+        if "sqlalchemy_execution_options" in self.config:
+            sqlalchemy_connection_kwargs = {'execution_options': self.config["sqlalchemy_execution_options"]}
+            return sqlalchemy.create_engine(self.sqlalchemy_url, **sqlalchemy_connection_kwargs)
         return sqlalchemy.create_engine(self.sqlalchemy_url)
 
     @staticmethod
