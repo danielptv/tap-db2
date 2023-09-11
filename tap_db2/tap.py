@@ -1,10 +1,10 @@
 """DB2 tap class."""
 
 from __future__ import annotations
-from singer_sdk import PluginBase, SQLTap
-from singer_sdk import typing as th, about
+from singer_sdk import SQLTap
+from singer_sdk import typing as th
 from singer_sdk.helpers.capabilities import PluginCapabilities, CapabilitiesEnum
-from singer_sdk.helpers import _classproperty
+from singer_sdk.helpers._classproperty import classproperty
 
 from tap_db2.client import DB2Stream
 
@@ -13,6 +13,7 @@ class TapDB2(SQLTap):
     """`Tap-DB2` is a Singer tap for IBM DB2 data sources."""
 
     name = "tap-db2"
+    package_name = "tap-ibm-db2"
     default_stream_class = DB2Stream
 
     config_jsonschema = th.PropertiesList(
@@ -60,24 +61,7 @@ class TapDB2(SQLTap):
         ),
     ).to_dict()
 
-    @classmethod
-    def _get_about_info(cls: type[PluginBase]) -> about.AboutInfo:
-        """Returns capabilities and other tap metadata.
-
-        Returns:
-            A dictionary containing the relevant 'about' information.
-        """
-        return about.AboutInfo(
-            name=cls.name,
-            description=cls.__doc__,
-            version=cls.get_plugin_version(),
-            sdk_version=cls.get_sdk_version(),
-            supported_python_versions=cls.get_supported_python_versions(),
-            capabilities=cls.capabilities,
-            settings=cls.config_jsonschema,
-        )
-
-    @_classproperty.classproperty
+    @classproperty
     def capabilities(self) -> list[CapabilitiesEnum]:
         """Get capabilities.
 
