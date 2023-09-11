@@ -123,7 +123,7 @@ class DB2Connector(SQLConnector):
             table_name=table_name.strip().upper(),
             schema_name=schema_name.strip().upper(),
             db_name=None,
-            delimiter="-",
+            delimiter=".",
         )
 
 class DB2Stream(SQLStream):
