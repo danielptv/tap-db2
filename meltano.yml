@@ -25,6 +25,8 @@ plugins:
       kind: password
     - name: encryption.encryption_method
     - name: encryption.ssl_server_certificate
+    - name: connection_parameters
+      kind: array
   loaders:
   - name: target-jsonl
     variant: andyh1203

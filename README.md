@@ -20,18 +20,19 @@ pipx install git+https://github.com/danielptv/tap-db2.git@main
 
 ## Configuration 📝
 
-| Setting               | Required | Default | Description                                                                                                                                 |
-| :-------------------- | :------: | :-----: | :------------------------------------------------------------------------------------------------------------------------------------------ |
-| host                  |   True   |  None   | The DB2 hostname.                                                                                                                           |
-| port                  |   True   |  None   | The DB2 port.                                                                                                                               |
-| database              |   True   |  None   | The DB2 database.                                                                                                                           |
-| schema                |  False   |  None   | The DB2 schema.                                                                                                                             |
-| user                  |   True   |  None   | The DB2 username.                                                                                                                           |
-| password              |   True   |  None   | The DB2 password.                                                                                                                           |
-| encryption            |  False   |  None   | Use to enable encrypted connection to DB2.                                                                                                  |
-| connection_parameters |  False   |  None   | Additional parameters appended to the DB2 connection string.                                                                                |
-| stream_maps           |  False   |  None   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |
-| stream_map_config     |  False   |  None   | User-defined config values to be used within map expressions.                                                                               |
+| Setting                           | Required | Default | Description                                                                                                                                      |
+| :-------------------------------- | :------: | :-----: | :----------------------------------------------------------------------------------------------------------------------------------------------- |
+| host                              |   True   |  None   | The DB2 hostname.                                                                                                                                |
+| port                              |   True   |  None   | The DB2 port.                                                                                                                                    |
+| database                          |   True   |  None   | The DB2 database.                                                                                                                                |
+| schema                            |  False   |  None   | The DB2 schema.                                                                                                                                  |
+| user                              |   True   |  None   | The DB2 username.                                                                                                                                |
+| password                          |   True   |  None   | The DB2 password.                                                                                                                                |
+| encryption.encryption_method      |   True   |  None   | The encryption method. Valid values are 'encrypted_verify_certificate' and 'none'.                                                               |
+| encryption.ssl_server_certificate |  False   |  None   | The path to the SSL server certificate.                                                                                                          |
+| connection_parameters             |  False   |  None   | Additional parameters to be appended to the connection string. This is an array of objects. Each object must contain the keys 'key' and 'value'. |
+| stream_maps                       |  False   |  None   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).      |
+| stream_map_config                 |  False   |  None   | User-defined config values to be used within map expressions.                                                                                    |
 
 A full list of supported settings and capabilities for this
 tap is available by running:
@@ -88,12 +89,6 @@ poetry run tap-db2 --help
 
 _**Note:** This tap will work in any Singer environment and does not require Meltano.
 Examples here are for convenience and to streamline end-to-end orchestration scenarios._
-
-<!--
-Developer TODO:
-Your project comes with a custom `meltano.yml` project file already created. Open the `meltano.yml` and follow any "TODO" items listed in
-the file.
--->
 
 Next, install Meltano (if you haven't already) and any needed plugins:
 
