@@ -102,8 +102,8 @@ class DB2Connector(SQLConnector):
     def get_fully_qualified_name(
         table_name: str | None = None,
         schema_name: str | None = None,
-        _database: str | None = None,
-        _delimiter: str = ".",
+        db_name: str | None = None,
+        delimiter: str = ".",
     ) -> str:
         """Concatenates a fully qualified name from the parts.
 
@@ -120,9 +120,9 @@ class DB2Connector(SQLConnector):
             The fully qualified name as a string.
         """
         return SQLConnector.get_fully_qualified_name(
-            db_name=None,
-            schema_name=schema_name.strip().upper(),
             table_name=table_name.strip().upper(),
+            schema_name=schema_name.strip().upper(),
+            db_name=None,
             delimiter="-",
         )
 
