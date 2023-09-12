@@ -4,14 +4,16 @@ This includes db2Stream and db2Connector.
 """
 
 from __future__ import annotations
+from datetime import datetime
 
 import typing as t
 
 import ibm_db_sa
 
 import sqlalchemy  # noqa: TCH002
-from singer_sdk import SQLConnector, SQLStream, typing as th
 from sqlalchemy.engine import Engine
+from singer_sdk import SQLConnector, SQLStream, typing as th
+from singer_sdk.helpers._state import STARTING_MARKER
 
 
 class DB2Connector(SQLConnector):
@@ -47,7 +49,7 @@ class DB2Connector(SQLConnector):
 
     def create_engine(self) -> Engine:
         if "sqlalchemy_execution_options" in self.config:
-            sqlalchemy_connection_kwargs = {'execution_options': self.config["sqlalchemy_execution_options"]}
+            sqlalchemy_connection_kwargs = {"execution_options": self.config["sqlalchemy_execution_options"]}
             return sqlalchemy.create_engine(self.sqlalchemy_url, **sqlalchemy_connection_kwargs)
         return sqlalchemy.create_engine(self.sqlalchemy_url)
 
@@ -129,10 +131,31 @@ class DB2Connector(SQLConnector):
             delimiter=".",
         )
 
+
 class DB2Stream(SQLStream):
     """Stream class for IBM DB2 streams."""
 
     connector_class = DB2Connector
+
+    def get_starting_replication_key_value(
+        self,
+        context: dict | None,
+    ) -> t.Any | None:  # noqa: ANN401
+        """Get starting replication key.
+
+        Args:
+            context: Stream partition or context dictionary.
+
+        Returns:
+            Starting replication value.
+        """
+        state = self.get_context_state(context)
+
+        if not state:
+            return None
+        # Format timestamp to precision supported by DB2 queries
+        timestamp = datetime.fromisoformat(state.get(STARTING_MARKER))
+        return timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
 
 class ROWID(sqlalchemy.sql.sqltypes.String):
