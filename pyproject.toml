@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tap-ibm-db2"
-version = "0.2.1"
+version = "0.2.2"
 description = "`Tap-DB2` is a Singer tap for IBM DB2 data sources."
 readme = "README.md"
 authors = ["Daniel Purtov"]
