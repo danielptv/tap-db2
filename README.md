@@ -20,19 +20,20 @@ pipx install git+https://github.com/danielptv/tap-db2.git@main
 
 ## Configuration 📝
 
-| Setting                           | Required | Default | Description                                                                                                                                      |
-| :-------------------------------- | :------: | :-----: | :----------------------------------------------------------------------------------------------------------------------------------------------- |
-| host                              |   True   |  None   | The DB2 hostname.                                                                                                                                |
-| port                              |   True   |  None   | The DB2 port.                                                                                                                                    |
-| database                          |   True   |  None   | The DB2 database.                                                                                                                                |
-| schema                            |  False   |  None   | The DB2 schema.                                                                                                                                  |
-| user                              |   True   |  None   | The DB2 username.                                                                                                                                |
-| password                          |   True   |  None   | The DB2 password.                                                                                                                                |
-| encryption.encryption_method      |   True   |  None   | The encryption method. Valid values are 'encrypted_verify_certificate' and 'none'.                                                               |
-| encryption.ssl_server_certificate |  False   |  None   | The path to the SSL server certificate.                                                                                                          |
-| connection_parameters             |  False   |  None   | Additional parameters to be appended to the connection string. This is an array of objects. Each object must contain the keys 'key' and 'value'. |
-| stream_maps                       |  False   |  None   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).      |
-| stream_map_config                 |  False   |  None   | User-defined config values to be used within map expressions.                                                                                    |
+| Setting                           | Required | Default | Description                                                                                                                                 |
+| :-------------------------------- | :------: | :-----: | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| host                              |   True   |  None   | The DB2 hostname.                                                                                                                           |
+| port                              |   True   |  None   | The DB2 port.                                                                                                                               |
+| database                          |   True   |  None   | The DB2 database.                                                                                                                           |
+| schema                            |  False   |  None   | The DB2 schema.                                                                                                                             |
+| user                              |   True   |  None   | The DB2 username.                                                                                                                           |
+| password                          |   True   |  None   | The DB2 password.                                                                                                                           |
+| encryption.encryption_method      |   True   |  None   | The encryption method. Valid values are 'encrypted_verify_certificate' and 'none'.                                                          |
+| encryption.ssl_server_certificate |  False   |  None   | The path to the SSL server certificate.                                                                                                     |
+| connection_parameters             |  False   |  None   | Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.                               |
+| sqlalchemy_execution_options      |  False   |  None   | Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.                                     |
+| stream_maps                       |  False   |  None   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html). |
+| stream_map_config                 |  False   |  None   | User-defined config values to be used within map expressions.                                                                               |
 
 A full list of supported settings and capabilities for this
 tap is available by running:
