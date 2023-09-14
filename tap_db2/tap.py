@@ -6,7 +6,7 @@ from singer_sdk import typing as th
 from singer_sdk.helpers.capabilities import PluginCapabilities, CapabilitiesEnum
 from singer_sdk.helpers._classproperty import classproperty
 
-from tap_db2.connector import DB2Stream
+from tap_db2.stream import DB2Stream
 
 
 class TapDB2(SQLTap):
