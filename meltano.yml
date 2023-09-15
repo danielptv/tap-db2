@@ -29,6 +29,8 @@ plugins:
       kind: object
     - name: sqlalchemy_execution_options
       kind: object
+    - name: query_partitioning
+      kind: array
   loaders:
   - name: target-jsonl
     variant: andyh1203

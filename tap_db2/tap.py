@@ -51,6 +51,33 @@ class TapDB2(SQLTap):
             description="Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.",
         ),
         th.Property(
+            "query_partitioning",
+            th.ArrayType(
+                th.ObjectType(
+                    th.Property("stream", th.StringType(), required=True, description="The stream name."),
+                    th.Property("key", th.StringType(), required=True, description="The column name."),
+                    th.Property(
+                        "partition_by_date",
+                        th.ObjectType(
+                            th.Property("days", th.IntegerType(), required=True, description="The number of days."),
+                            th.Property("months", th.IntegerType(), required=True, description="The number of years."),
+                            th.Property("years", th.IntegerType(), required=True, description="The number of years."),
+                        ),
+                        required=False,
+                        description="Partitioning using a column of type 'datetime'. The partition size can be defined by the number of days, months and years.",
+                    ),
+                    th.Property(
+                        "partition_by_number",
+                        th.ObjectType(th.Property("partition_size", th.IntegerType(), required=True, description="The partition size.")),
+                        required=False,
+                        description="Partitioning using a column of type 'number'. The partition size can be defined by setting partition_size.",
+                    ),
+                ),
+            ),
+            required=False,
+            description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Partitioning is supported for columns of type 'number' and 'datetime'. Note: The currently supported methods do not guarantee a constant partition size.",
+        ),
+        th.Property(
             "stream_maps",
             th.ObjectType(),
             description="Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).",
