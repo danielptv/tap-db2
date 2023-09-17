@@ -102,4 +102,4 @@ class TapDB2(SQLTap):
 
 
 if __name__ == "__main__":
-    TapDB2.cli()
+    TapDB2.cli() # pylint: disable=no-value-for-parameter

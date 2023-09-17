@@ -8,6 +8,7 @@ import typing as t
 import ibm_db_sa
 
 import sqlalchemy  # noqa: TCH002
+from sqlalchemy import func, select
 from singer_sdk import SQLStream
 from singer_sdk.helpers._state import STARTING_MARKER
 from dateutil.relativedelta import relativedelta
@@ -92,14 +93,10 @@ class DB2Stream(SQLStream):
 
                 if partition_config is not None:
                     execute_generator = False
-                    start_val_limit = (
-                        ""
-                        if not self.replication_key or not start_val
-                        else f"where {self.fully_qualified_name}.{str(table.columns[self.replication_key]).split('.')[1]} >= '{start_val}'"
-                    )
-                    lower_limit = conn.exec_driver_sql(
-                        f"SELECT MIN({partition_config['key']}) FROM {self.fully_qualified_name} {start_val_limit};"
-                    ).first()[0]
+                    lower_limit_query = select(func.min(table.columns[partition_config['key']])) # pylint: disable=not-callable
+                    if self.replication_key and start_val:
+                        lower_limit_query = lower_limit_query.where(replication_key_col >= start_val)
+                    lower_limit = conn.execute(lower_limit_query).first()[0]
 
                     if "partition_by_date" in partition_config:
                         partition_by_date = partition_config["partition_by_date"]
@@ -111,9 +108,11 @@ class DB2Stream(SQLStream):
                         termination_limit = datetime.now()
                     else:
                         delta = partition_config["partition_by_number"]["partition_size"]
-                        termination_limit = conn.exec_driver_sql(
-                            f"SELECT MAX({partition_config['key']}) FROM {self.fully_qualified_name} {start_val_limit};"
-                        ).first()[0]
+                        termination_limit_query = select(func.max(table.columns[partition_config['key']])) # pylint: disable=not-callable
+                        if self.replication_key and start_val:
+                            termination_limit_query = termination_limit_query.where(replication_key_col >= start_val)
+                        termination_limit = conn.execute(termination_limit_query).first()[0]
+                        
                     upper_limit = lower_limit + delta
 
                     while upper_limit < termination_limit:
