@@ -92,7 +92,11 @@ class DB2Stream(SQLStream):
 
                 if partition_config is not None:
                     execute_generator = False
-                    start_val_limit = "" if not self.replication_key or not start_val else f"where {replication_key_col} >= {start_val}"
+                    start_val_limit = (
+                        ""
+                        if not self.replication_key or not start_val
+                        else f"where {self.fully_qualified_name}.{str(table.columns[self.replication_key]).split('.')[1]} >= '{start_val}'"
+                    )
                     lower_limit = conn.exec_driver_sql(
                         f"SELECT MIN({partition_config['key']}) FROM {self.fully_qualified_name} {start_val_limit};"
                     ).first()[0]
