@@ -24,7 +24,7 @@ jobs:
         ports:
           - 50000:50000
         options: >-
-          --health-cmd "su - db2inst1 -c "db2 connect to testdb; db2 select 1 from sysibm.sysdummy1" || exit 1"
+          --health-cmd 'su - db2inst1 -c "db2 connect to testdb; db2 select 1 from sysibm.sysdummy1" || exit 1'
           --health-start-period 15s
           --health-interval 10s
           --health-timeout 5s
