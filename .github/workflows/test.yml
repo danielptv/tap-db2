@@ -24,6 +24,9 @@ jobs:
     - name: Install Poetry
       run: |
         pip install poetry
+    - name: Check Docker
+      run: |
+        docker ps
     - name: Install dependencies
       run: |
         poetry install
