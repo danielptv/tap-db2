@@ -5,10 +5,11 @@ from __future__ import annotations
 import typing as t
 
 import sqlalchemy  # noqa: TCH002
-from sqlalchemy.engine import Engine, Inspector
-from singer_sdk import SQLConnector, typing as th
+from singer_sdk import SQLConnector
+from singer_sdk import typing as th
 from singer_sdk._singerlib.catalog import CatalogEntry, MetadataMapping
 from singer_sdk._singerlib.schema import Schema
+from sqlalchemy.engine import Engine, Inspector
 
 
 class DB2Connector(SQLConnector):

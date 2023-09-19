@@ -1,10 +1,11 @@
 """DB2 tap class."""
 
 from __future__ import annotations
+
 from singer_sdk import SQLTap
 from singer_sdk import typing as th
-from singer_sdk.helpers.capabilities import PluginCapabilities, CapabilitiesEnum
 from singer_sdk.helpers._classproperty import classproperty
+from singer_sdk.helpers.capabilities import CapabilitiesEnum, PluginCapabilities
 
 from tap_db2.stream import DB2Stream
 
@@ -68,7 +69,11 @@ class TapDB2(SQLTap):
                     ),
                     th.Property(
                         "partition_by_number",
-                        th.ObjectType(th.Property("partition_size", th.IntegerType(), required=True, description="The partition size.")),
+                        th.ObjectType(
+                            th.Property(
+                                "partition_size", th.IntegerType(), required=True, description="The partition size."
+                            )
+                        ),
                         required=False,
                         description="Partitioning using a column of type 'number'. The partition size can be defined by setting partition_size.",
                     ),
@@ -102,4 +107,4 @@ class TapDB2(SQLTap):
 
 
 if __name__ == "__main__":
-    TapDB2.cli() # pylint: disable=no-value-for-parameter
+    TapDB2.cli()  # pylint: disable=no-value-for-parameter

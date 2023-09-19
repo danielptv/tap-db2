@@ -1,17 +1,16 @@
 """DB2 stream class."""
 
 from __future__ import annotations
-from datetime import datetime
 
 import typing as t
+from datetime import datetime
 
 import ibm_db_sa
-
 import sqlalchemy  # noqa: TCH002
-from sqlalchemy import func, select
+from dateutil.relativedelta import relativedelta
 from singer_sdk import SQLStream
 from singer_sdk.helpers._state import STARTING_MARKER
-from dateutil.relativedelta import relativedelta
+from sqlalchemy import func, select
 
 from tap_db2.connector import DB2Connector
 
@@ -93,7 +92,9 @@ class DB2Stream(SQLStream):
 
                 if partition_config is not None:
                     execute_generator = False
-                    lower_limit_query = select(func.min(table.columns[partition_config['key']])) # pylint: disable=not-callable
+                    lower_limit_query = select(
+                        func.min(table.columns[partition_config["key"]])
+                    )  # pylint: disable=not-callable
                     if self.replication_key and start_val:
                         lower_limit_query = lower_limit_query.where(replication_key_col >= start_val)
                     lower_limit = conn.execute(lower_limit_query).first()[0]
@@ -108,11 +109,13 @@ class DB2Stream(SQLStream):
                         termination_limit = datetime.now()
                     else:
                         delta = partition_config["partition_by_number"]["partition_size"]
-                        termination_limit_query = select(func.max(table.columns[partition_config['key']])) # pylint: disable=not-callable
+                        termination_limit_query = select(
+                            func.max(table.columns[partition_config["key"]])
+                        )  # pylint: disable=not-callable
                         if self.replication_key and start_val:
                             termination_limit_query = termination_limit_query.where(replication_key_col >= start_val)
                         termination_limit = conn.execute(termination_limit_query).first()[0]
-                        
+
                     upper_limit = lower_limit + delta
 
                     while upper_limit < termination_limit:
