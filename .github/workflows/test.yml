@@ -27,6 +27,7 @@ jobs:
     - name: Check Docker
       run: |
         docker ps
+        netstat -lt
     - name: Install dependencies
       run: |
         poetry install
