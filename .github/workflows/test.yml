@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       db2:
-        image: icr.io/db2_community/db2
+        image: "icr.io/db2_community/db2:latest"
         env:
           LICENSE: accept
           DB2INSTANCE: db2inst1
