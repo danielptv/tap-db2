@@ -12,7 +12,7 @@ from tap_db2.tap import TapDB2
 
 TEST_CONFIG = {
     "start_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"),
-    "host": "localhost",
+    "host": "127.0.0.1",
     "port": "50000",
     "database": "testdb",
     "user": "db2inst1",
