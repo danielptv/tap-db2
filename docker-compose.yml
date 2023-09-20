@@ -1,5 +1,5 @@
 services:
-  db2-test:
+  db2:
     container_name: db2
     image: icr.io/db2_community/db2
     privileged: true
