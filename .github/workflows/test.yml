@@ -1,4 +1,4 @@
-name: Test tap-db2
+name: Tests
 
 on: [push]
 

@@ -1,8 +1,12 @@
 <h1 align="center">Tap-DB2 👑</h1>
 
-`Tap-DB2` is a Singer tap for IBM DB2 data sources. Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
+<p align="center">
+<a href="https://github.com/danielptv/tap-db2/actions/"><img alt="Actions Status" src="https://github.com/danielptv/tap-db2/actions/workflows/test.yml/badge.svg"></a>
+<a href="https://github.com/danielptv/tap-db2/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+</p>
 
-> ❗️ Caution: This tap has only been tested against an IBM DB2 running on z/OS.
+`Tap-DB2` is a Singer tap for IBM DB2 data sources. Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 ## Installation ⚙️
 
@@ -89,8 +93,8 @@ poetry run tap-db2 --help
 
 ### Testing with [Meltano](https://www.meltano.com)
 
-_**Note:** This tap will work in any Singer environment and does not require Meltano.
-Examples here are for convenience and to streamline end-to-end orchestration scenarios._
+***Note:** This tap will work in any Singer environment and does not require Meltano.
+Examples here are for convenience and to streamline end-to-end orchestration scenarios.*
 
 Next, install Meltano (if you haven't already) and any needed plugins:
 
