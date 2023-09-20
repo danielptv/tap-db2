@@ -37,7 +37,13 @@ jobs:
         docker ps
         netstat -lt
         docker logs db2
-        docker exec -it db2 su - db2inst1 -c "db2 connect to testdb; db2 select 1 from sysibm.sysdummy1"
+        sleep 5
+        until docker exec -it db2 su - db2inst1 -c "db2 connect to testdb; db2 select 1 from sysibm.sysdummy1"; do
+                echo "Waiting for PostgreSQL databases ..."
+                sleep 2
+        done
+
+        
         echo $?
         echo "RETURN"
 
