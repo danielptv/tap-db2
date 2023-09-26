@@ -13,7 +13,7 @@
 Install from PyPi:
 
 ```bash
-pipx install tap-db2
+pipx install tap-ibm-db2
 ```
 
 Install from GitHub:
