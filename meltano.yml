@@ -31,6 +31,8 @@ plugins:
       kind: object
     - name: query_partitioning
       kind: array
+    - name: ignore_supplied_tables
+      kind: boolean
   loaders:
   - name: target-jsonl
     variant: andyh1203

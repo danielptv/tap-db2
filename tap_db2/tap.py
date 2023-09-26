@@ -83,6 +83,13 @@ class TapDB2(SQLTap):
             description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Partitioning is supported for columns of type 'number' and 'datetime'. Note: The currently supported methods do not guarantee a constant partition size.",
         ),
         th.Property(
+            "ignore_supplied_tables",
+            th.BooleanType(),
+            default=True,
+            required=False,
+            description="Ignore DB2-supplied user tables. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables)."
+        ),
+        th.Property(
             "stream_maps",
             th.ObjectType(),
             description="Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).",

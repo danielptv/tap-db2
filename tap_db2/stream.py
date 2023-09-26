@@ -93,8 +93,8 @@ class DB2Stream(SQLStream):
                 if partition_config is not None:
                     execute_generator = False
                     lower_limit_query = select(
-                        func.min(table.columns[partition_config["key"]])
-                    )  # pylint: disable=not-callable
+                        func.min(table.columns[partition_config["key"]]) # pylint: disable=not-callable
+                    )  
                     if self.replication_key and start_val:
                         lower_limit_query = lower_limit_query.where(replication_key_col >= start_val)
                     lower_limit = conn.execute(lower_limit_query).first()[0]
@@ -110,8 +110,8 @@ class DB2Stream(SQLStream):
                     else:
                         delta = partition_config["partition_by_number"]["partition_size"]
                         termination_limit_query = select(
-                            func.max(table.columns[partition_config["key"]])
-                        )  # pylint: disable=not-callable
+                            func.max(table.columns[partition_config["key"]]) # pylint: disable=not-callable
+                        )  
                         if self.replication_key and start_val:
                             termination_limit_query = termination_limit_query.where(replication_key_col >= start_val)
                         termination_limit = conn.execute(termination_limit_query).first()[0]

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import typing as t
 
 import sqlalchemy  # noqa: TCH002
@@ -10,6 +11,8 @@ from singer_sdk import typing as th
 from singer_sdk._singerlib.catalog import CatalogEntry, MetadataMapping
 from singer_sdk._singerlib.schema import Schema
 from sqlalchemy.engine import Engine, Inspector
+
+SUPPLIED_USER_TABLES_PATTERN = r"^(DSN_|PLAN_TABLE)"
 
 
 class DB2Connector(SQLConnector):
@@ -83,19 +86,22 @@ class DB2Connector(SQLConnector):
                 inspected,
                 schema_name,
             ):
-                # Filter by schema
-                # Connection parameter 'CURRENTSCHEMA=mySchema;' doesn't work
-                # https://www.ibm.com/support/pages/525-error-nullidsysstat-package-when-trying-set-current-schema-against-db2-zos-database
-                target_schema = self.config["schema"] if "schema" in self.config else None
-                if target_schema is None or target_schema.strip().lower() == schema_name.strip().lower():
-                    catalog_entry = self.discover_catalog_entry(
-                        engine,
-                        inspected,
-                        schema_name,
-                        table_name,
-                        is_view,
-                    )
-                    result.append(catalog_entry.to_dict())
+                if not re.match(SUPPLIED_USER_TABLES_PATTERN, table_name, re.IGNORECASE) or (
+                    "ignore_supplied_tables" in self.config and not self.config["ignore_supplied_tables"]
+                ):
+                    # Filter by schema
+                    # Connection parameter 'CURRENTSCHEMA=mySchema;' doesn't work
+                    # https://www.ibm.com/support/pages/525-error-nullidsysstat-package-when-trying-set-current-schema-against-db2-zos-database
+                    target_schema = self.config["schema"] if "schema" in self.config else None
+                    if target_schema is None or target_schema.strip().lower() == schema_name.strip().lower():
+                        catalog_entry = self.discover_catalog_entry(
+                            engine,
+                            inspected,
+                            schema_name,
+                            table_name,
+                            is_view,
+                        )
+                        result.append(catalog_entry.to_dict())
 
         return result
 
