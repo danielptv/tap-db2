@@ -106,7 +106,7 @@ class DB2Stream(SQLStream):
                             months=partition_by_date["months"],
                             years=partition_by_date["years"],
                         )
-                        termination_limit = datetime.now()
+                        termination_limit = datetime.now() + delta + relativedelta(days=1)
                     else:
                         delta = partition_config["partition_by_number"]["partition_size"]
                         termination_limit_query = select(
