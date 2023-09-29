@@ -7,9 +7,10 @@ from datetime import datetime
 
 import ibm_db_sa
 import sqlalchemy  # noqa: TCH002
-from dateutil.relativedelta import relativedelta
 from singer_sdk import SQLStream
+from singer_sdk.connectors import SQLConnector
 from singer_sdk.helpers._state import STARTING_MARKER
+from singer_sdk.tap_base import Tap
 from sqlalchemy import func, select
 
 from tap_db2.connector import DB2Connector
@@ -19,6 +20,32 @@ class DB2Stream(SQLStream):
     """Stream class for IBM DB2 streams."""
 
     connector_class = DB2Connector
+
+    def __init__(self, tap: Tap, catalog_entry: dict, connector: SQLConnector | None = None) -> None:
+        super().__init__(tap, catalog_entry, connector)
+        self.query_partitioning_pk = None
+        self.query_partitioning_size = None
+        self._is_sorted = super().is_sorted
+
+        for stream in self.config["query_partitioning"]:
+            if stream["stream"] == self.tap_stream_id:
+                self.query_partitioning_pk = stream["primary_key"]
+                self.query_partitioning_size = stream["partition_size"]
+                break
+            elif stream["stream"] == "*":
+                self.query_partitioning_pk = stream["primary_key"]
+                self.query_partitioning_size = stream["partition_size"]
+
+        if self.replication_key and self.query_partitioning_pk and self.replication_key != self.query_partitioning_pk:
+            self.is_sorted = False
+
+    @property
+    def is_sorted(self):
+        return self._is_sorted
+
+    @is_sorted.setter
+    def is_sorted(self, value):
+        self._is_sorted = value
 
     def get_starting_replication_key_value(
         self,
@@ -71,7 +98,11 @@ class DB2Stream(SQLStream):
         query = table.select()
         if self.replication_key:
             replication_key_col = table.columns[self.replication_key]
-            query = query.order_by(replication_key_col)
+            query = (
+                query.order_by(replication_key_col)
+                if self.query_partitioning_pk is None
+                else query.order_by(table.columns[self.query_partitioning_pk])
+            )
             start_val = self.get_starting_replication_key_value(context)
             if start_val:
                 query = query.where(replication_key_col >= start_val)
@@ -79,65 +110,39 @@ class DB2Stream(SQLStream):
         if self.ABORT_AT_RECORD_COUNT is not None:
             query = query.limit(self.ABORT_AT_RECORD_COUNT + 1)
 
-        execute_generator = True
         with self.connector._connect() as conn:
-            if "query_partitioning" in self.config:
-                partition_config = None
-                for stream in self.config["query_partitioning"]:
-                    if stream["stream"] == self.tap_stream_id:
-                        partition_config = stream
-                        break
-                    elif stream["stream"] == "*":
-                        partition_config = stream
-
-                if partition_config is not None:
-                    execute_generator = False
-                    lower_limit_query = select(
-                        func.min(table.columns[partition_config["key"]]) # pylint: disable=not-callable
-                    )  
-                    if self.replication_key and start_val:
-                        lower_limit_query = lower_limit_query.where(replication_key_col >= start_val)
-                    lower_limit = conn.execute(lower_limit_query).first()[0]
-
-                    if "partition_by_date" in partition_config:
-                        partition_by_date = partition_config["partition_by_date"]
-                        delta = relativedelta(
-                            days=partition_by_date["days"],
-                            months=partition_by_date["months"],
-                            years=partition_by_date["years"],
-                        )
-                        termination_limit = datetime.now() + delta + relativedelta(days=1)
-                    else:
-                        delta = partition_config["partition_by_number"]["partition_size"]
-                        termination_limit_query = select(
-                            func.max(table.columns[partition_config["key"]]) # pylint: disable=not-callable
-                        )  
-                        if self.replication_key and start_val:
-                            termination_limit_query = termination_limit_query.where(replication_key_col >= start_val)
-                        termination_limit = conn.execute(termination_limit_query).first()[0]
-
-                    upper_limit = lower_limit + delta
-
-                    while upper_limit < termination_limit:
-                        limited_query = query.where(table.columns[partition_config["key"]] >= lower_limit).where(
-                            table.columns[partition_config["key"]] < upper_limit
-                        )
-                        for record in conn.execute(limited_query):
-                            transformed_record = self.post_process(dict(record._mapping))
-                            if transformed_record is None:
-                                # Record filtered out during post_process()
-                                continue
-                            yield transformed_record
-                        lower_limit = upper_limit
-                        upper_limit = upper_limit + delta
-
-            if execute_generator is True:
+            if self.query_partitioning_pk is None:
                 for record in conn.execute(query):
                     transformed_record = self.post_process(dict(record._mapping))
                     if transformed_record is None:
                         # Record filtered out during post_process()
                         continue
                     yield transformed_record
+
+            else:
+                limit = self.query_partitioning_size
+                primary_key = self.query_partitioning_pk
+                lower_limit = None
+
+                termination_query = select(func.count(table.columns[primary_key]))  # pylint: disable=not-callable
+                if self.replication_key and start_val:
+                    termination_query = termination_query.where(replication_key_col >= start_val)
+                termination_limit = conn.execute(termination_query).first()[0]
+                fetched_count = 0
+
+                while fetched_count < termination_limit:
+                    limited_query = query.limit(limit)
+                    if lower_limit is not None:
+                        limited_query = limited_query.where(table.columns[primary_key] > lower_limit)
+
+                    for record in conn.execute(limited_query):
+                        transformed_record = self.post_process(dict(record._mapping))
+                        if transformed_record is None:
+                            # Record filtered out during post_process()
+                            continue
+                        lower_limit = transformed_record[primary_key]
+                        fetched_count += 1
+                        yield transformed_record
 
 
 class ROWID(sqlalchemy.sql.sqltypes.String):

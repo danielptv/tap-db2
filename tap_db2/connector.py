@@ -8,9 +8,7 @@ import typing as t
 import sqlalchemy  # noqa: TCH002
 from singer_sdk import SQLConnector
 from singer_sdk import typing as th
-from singer_sdk._singerlib.catalog import CatalogEntry, MetadataMapping
-from singer_sdk._singerlib.schema import Schema
-from sqlalchemy.engine import Engine, Inspector
+from sqlalchemy.engine import Engine
 
 SUPPLIED_USER_TABLES_PATTERN = r"^(DSN_|PLAN_TABLE)"
 
@@ -102,95 +100,4 @@ class DB2Connector(SQLConnector):
                             is_view,
                         )
                         result.append(catalog_entry.to_dict())
-
         return result
-
-    def discover_catalog_entry(
-        self,
-        engine: Engine,  # noqa: ARG002
-        inspected: Inspector,
-        schema_name: str,
-        table_name: str,
-        is_view: bool,  # noqa: FBT001
-    ) -> CatalogEntry:
-        """Create `CatalogEntry` object for the given table or a view.
-
-        Args:
-            engine: SQLAlchemy engine
-            inspected: SQLAlchemy inspector instance for engine
-            schema_name: Schema name to inspect
-            table_name: Name of the table or a view
-            is_view: Flag whether this object is a view, returned by `get_object_names`
-
-        Returns:
-            `CatalogEntry` object for the given table or a view
-        """
-        # Initialize unique stream name
-        unique_stream_id = self.get_fully_qualified_name(
-            db_name=None,
-            schema_name=schema_name.strip().upper(),
-            table_name=table_name.strip().upper(),
-            delimiter="-",
-        )
-
-        # Detect key properties
-        possible_primary_keys: list[list[str]] = []
-        pk_def = inspected.get_pk_constraint(table_name, schema=schema_name)
-        if pk_def and "constrained_columns" in pk_def:
-            possible_primary_keys.append(pk_def["constrained_columns"])
-
-        possible_primary_keys.extend(
-            index_def["column_names"]
-            for index_def in inspected.get_indexes(table_name, schema=schema_name)
-            if index_def.get("unique", False)
-        )
-
-        key_properties = next(iter(possible_primary_keys), None)
-
-        # Initialize columns list
-        table_schema = th.PropertiesList()
-        for column_def in inspected.get_columns(table_name, schema=schema_name):
-            column_name = column_def["name"]
-            is_nullable = column_def.get("nullable", False)
-            jsonschema_type: dict = self.to_jsonschema_type(
-                t.cast(sqlalchemy.types.TypeEngine, column_def["type"]),
-            )
-            table_schema.append(
-                th.Property(
-                    name=column_name,
-                    wrapped=th.CustomType(jsonschema_type),
-                    required=not is_nullable,
-                ),
-            )
-        schema = table_schema.to_dict()
-
-        # Initialize available replication methods
-        addl_replication_methods: list[str] = [""]  # By default an empty list.
-        # Notes regarding replication methods:
-        # - 'INCREMENTAL' replication must be enabled by the user by specifying
-        #   a replication_key value.
-        # - 'LOG_BASED' replication must be enabled by the developer, according
-        #   to source-specific implementation capabilities.
-        replication_method = next(reversed(["FULL_TABLE", *addl_replication_methods]))
-
-        # Create the catalog entry object
-        return CatalogEntry(
-            tap_stream_id=unique_stream_id,
-            stream=unique_stream_id,
-            table=table_name,
-            key_properties=key_properties,
-            schema=Schema.from_dict(schema),
-            is_view=is_view,
-            replication_method=replication_method,
-            metadata=MetadataMapping.get_standard_metadata(
-                schema_name=schema_name,
-                schema=schema,
-                replication_method=replication_method,
-                key_properties=key_properties,
-                valid_replication_keys=None,  # Must be defined by user
-            ),
-            database=None,  # Expects single-database context
-            row_count=None,
-            stream_alias=None,
-            replication_key=None,  # Must be defined by user
-        )
