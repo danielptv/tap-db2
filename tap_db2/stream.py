@@ -27,7 +27,8 @@ class DB2Stream(SQLStream):
         self.query_partitioning_size = None
         self._is_sorted = super().is_sorted
 
-        for stream in self.config["query_partitioning"]:
+        partitioning_configs = self.config.get("query_partitioning", {})
+        for stream in partitioning_configs:
             if stream["stream"] == self.tap_stream_id:
                 self.query_partitioning_pk = stream["primary_key"]
                 self.query_partitioning_size = stream["partition_size"]
