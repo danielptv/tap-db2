@@ -1,0 +1,81 @@
+{
+    "streams": [
+      {
+        "tap_stream_id": "db2inst1-test_table",
+        "table_name": "test_table",
+        "replication_method": "",
+        "key_properties": [
+          "id"
+        ],
+        "schema": {
+          "properties": {
+            "id": {
+              "type": [
+                "integer"
+              ]
+            },
+            "updated_at": {
+              "format": "date-time",
+              "type": [
+                "string"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "id",
+            "updated_at"
+          ]
+        },
+        "is_view": false,
+        "stream": "db2inst1-test_table",
+        "metadata": [
+          {
+            "breadcrumb": [
+              "properties",
+              "id"
+            ],
+            "metadata": {
+              "inclusion": "automatic"
+            }
+          },
+          {
+            "breadcrumb": [
+              "properties",
+              "updated_at"
+            ],
+            "metadata": {
+              "inclusion": "available"
+            }
+          },
+          {
+            "breadcrumb": [
+              "properties",
+              "name"
+            ],
+            "metadata": {
+              "inclusion": "available"
+            }
+          },
+          {
+            "breadcrumb": [],
+            "metadata": {
+              "inclusion": "available",
+              "table-key-properties": [
+                "id"
+              ],
+              "forced-replication-method": "",
+              "schema-name": "db2inst1",
+              "selected": true
+            }
+          }
+        ]
+      }
+    ]
+  }
