@@ -31,14 +31,20 @@ class DB2Connector(SQLConnector):
             f":{config['port']}/"
             f"{config['database']};"
         )
-        if (
-            "encryption" in config
-            and "encryption_method" in config["encryption"]
-            and config["encryption"]["encryption_method"] != "none"
-        ):
+        if "encryption" in config:
             connection_url += "SECURITY=SSL;"
             if "ssl_server_certificate" in config["encryption"]:
                 connection_url += f"SSLServerCertificate={config['encryption']['ssl_server_certificate']};"
+            if "ssl_client_key_store_db" in config["encryption"]:
+                connection_url += f"SSLClientKeyStoreDB={config['encryption']['ssl_client_key_store_db']['database']};"
+                if "password" in config["encryption"]["ssl_client_key_store_db"]:
+                    connection_url += (
+                        f"SSLClientKeyStoreDBPassword={config['encryption']['ssl_client_key_store_db']['password']};"
+                    )
+                if "key_stash" in config["encryption"]["ssl_client_key_store_db"]:
+                    connection_url += (
+                        f"SSLClientKeyStash={config['encryption']['ssl_client_key_store_db']['key_stash']};"
+                    )
         if "connection_parameters" in config:
             for key, value in config["connection_parameters"].items():
                 connection_url += f"{key}={value};"

@@ -28,16 +28,38 @@ class TapDB2(SQLTap):
             "encryption",
             th.ObjectType(
                 th.Property(
-                    "encryption_method",
-                    th.StringType,
-                    allowed_values=["none", "encrypted_verify_certificate"],
-                    required=True,
-                    description="The encryption method. Valid values are 'encrypted_verify_certificate' and 'none'.",
+                    "ssl_server_certificate",
+                    th.StringType(),
+                    required=False,
+                    description="The path to the SSL server certificate.",
                 ),
                 th.Property(
-                    "ssl_server_certificate", th.StringType, description="The path to the SSL server certificate."
+                    "ssl_client_key_store_db",
+                    th.ObjectType(
+                        th.Property(
+                            "database",
+                            th.StringType(),
+                            required=True,
+                            description="The full path to the client keystore database.",
+                        ),
+                        th.Property(
+                            "password",
+                            th.StringType(),
+                            secret=True,
+                            required=False,
+                            description="The keystore password.",
+                        ),
+                        th.Property(
+                            "key_stash",
+                            th.StringType(),
+                            required=False,
+                            description="The full path to the client key stash.",
+                        ),
+                    ),
                 ),
             ),
+            required=False,
+            description="Encryption settings for the DB2 connection. Setting this to an empty object will append 'SECURITY=SSL' to the connection string. For more information check out [python-ibmdb](https://github.com/ibmdb/python-ibmdb#example-of-ssl-connection-string)",
         ),
         th.Property(
             "connection_parameters",

@@ -23,8 +23,13 @@ plugins:
     - name: user
     - name: password
       kind: password
-    - name: encryption.encryption_method
+    - name: encryption
+      kind: object
     - name: encryption.ssl_server_certificate
+    - name: encryption.ssl_client_key_store_db.database
+    - name: encryption.ssl_client_key_store_db.password
+      kind: password
+    - name: encryption.ssl_client_key_store_db.key_stash
     - name: connection_parameters
       kind: object
     - name: sqlalchemy_execution_options
