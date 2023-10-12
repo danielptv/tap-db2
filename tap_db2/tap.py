@@ -53,12 +53,16 @@ class TapDB2(SQLTap):
         ),
         th.Property(
             "query_partitioning",
-            th.ArrayType(
-                th.ObjectType(
-                    th.Property("stream", th.StringType(), required=True, description="The stream name."),
-                    th.Property("primary_key", th.StringType(), required=True, description="The primary key."),
-                    th.Property("partition_size", th.IntegerType(), required=True, description="The partition size."),
-                ),
+            th.ObjectType(
+                additional_properties=th.CustomType(
+                    {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "primary_key": {"type": ["string"]},
+                            "partition_size": {"type": ["integer"]},
+                        },
+                    }
+                )
             ),
             required=False,
             description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query.",
@@ -72,12 +76,34 @@ class TapDB2(SQLTap):
         ),
         th.Property(
             "stream_maps",
-            th.ObjectType(),
+            th.ObjectType(
+                additional_properties=th.CustomType(
+                    {
+                        "type": ["object", "string", "null"],
+                        "properties": {
+                            "__filter__": {"type": ["string", "null"]},
+                            "__source__": {"type": ["string", "null"]},
+                            "__alias__": {"type": ["string", "null"]},
+                            "__else__": {
+                                "type": ["string", "null"],
+                                "enum": [None, "__NULL__"],
+                            },
+                            "__key_properties__": {
+                                "type": ["array", "null"],
+                                "items": {"type": "string"},
+                            },
+                        },
+                        "additionalProperties": {"type": ["string", "null"]},
+                    },
+                ),
+            ),
+            required=False,
             description="Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).",
         ),
         th.Property(
             "stream_map_config",
             th.ObjectType(),
+            required=False,
             description="User-defined config values to be used within map expressions.",
         ),
     ).to_dict()

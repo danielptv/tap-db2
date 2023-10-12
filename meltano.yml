@@ -30,7 +30,7 @@ plugins:
     - name: sqlalchemy_execution_options
       kind: object
     - name: query_partitioning
-      kind: array
+      kind: object
     - name: ignore_supplied_tables
       kind: boolean
   loaders:

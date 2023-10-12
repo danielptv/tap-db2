@@ -28,14 +28,12 @@ class DB2Stream(SQLStream):
         self._is_sorted = super().is_sorted
 
         partitioning_configs = self.config.get("query_partitioning", {})
-        for stream in partitioning_configs:
-            if stream["stream"] == self.tap_stream_id:
-                self.query_partitioning_pk = stream["primary_key"]
-                self.query_partitioning_size = stream["partition_size"]
-                break
-            elif stream["stream"] == "*":
-                self.query_partitioning_pk = stream["primary_key"]
-                self.query_partitioning_size = stream["partition_size"]
+        if self.tap_stream_id in partitioning_configs:
+            self.query_partitioning_pk = partitioning_configs[self.tap_stream_id]["primary_key"]
+            self.query_partitioning_size = partitioning_configs[self.tap_stream_id]["partition_size"]
+        elif "*" in partitioning_configs:
+            self.query_partitioning_pk = partitioning_configs["*"]["primary_key"]
+            self.query_partitioning_size = partitioning_configs["*"]["partition_size"]
 
         if self.replication_key and self.query_partitioning_pk and self.replication_key != self.query_partitioning_pk:
             self.is_sorted = False
