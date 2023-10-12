@@ -35,7 +35,7 @@ pipx install git+https://github.com/danielptv/tap-db2.git@main
 | encryption                   |   True   | Encryption settings for the DB2 connection.                                                                                                                                         |
 | connection_parameters        |  False   | Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.                                                                       |
 | sqlalchemy_execution_options |  False   | Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.                                                                             |
-| query_partitioning           |  False   | Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Only works for streams with a numeric primary key.                |
+| query_partitioning           |  False   | Partition query into smaller subsets.                |
 | ignore_supplied_tables       |  False   | Ignore DB2-supplied user tables. Defaults to 'True'. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables). |
 | stream_maps                  |  False   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).                                         |
 | stream_map_config            |  False   | User-defined config values to be used within map expressions.                                                                                                                       |
@@ -127,6 +127,29 @@ plugins:
 ```
 
 This will append `SECURITY=SSL;SSLClientKeyStoreDB=<Full path to the client keystore database>;SSLClientKeyStash=<Full path to the client keystore stash>;` to the connection string.
+
+### Configure query partitioning 🧩
+
+This Singer tap supports the partitioning of SQL queries into smaller sub-queries to reduce the CPU load on the database. This is particularly useful when working with large amounts of data and a DB2 that has set strict resource limits per query. ***Note: This only works for streams with a numeric primary key.***
+
+The configuration for query partitioning should look as follows:
+
+```yaml
+...
+plugins:
+  extractors:
+  - name: tap-db2
+    variant: danielptv
+    pip_url: tap-ibm-db2
+    config:
+      ...
+      query_partitioning:
+      <stream>:
+        primary_key: <primary key>
+        partition_size: 1000
+```
+
+Replace `<stream>` with the stream name and `<primary key>` with the stream's primary key. Use `*` to apply a query partitioning setting to all streams not explicitly declared.
 
 ## Usage 👷‍♀️
 
