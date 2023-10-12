@@ -59,7 +59,7 @@ class TapDB2(SQLTap):
                 ),
             ),
             required=False,
-            description="Encryption settings for the DB2 connection. Setting this to an empty object will append 'SECURITY=SSL' to the connection string. For more information check out [python-ibmdb](https://github.com/ibmdb/python-ibmdb#example-of-ssl-connection-string)",
+            description="Encryption settings for the DB2 connection. Setting this to an empty object will append 'SECURITY=SSL' to the connection string. For more information check out [python-ibmdb](https://github.com/ibmdb/python-ibmdb#example-of-ssl-connection-string).",
         ),
         th.Property(
             "connection_parameters",
