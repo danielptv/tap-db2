@@ -87,7 +87,7 @@ class TapDB2(SQLTap):
                 )
             ),
             required=False,
-            description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query.",
+            description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Only works for streams with numeric primary keys.",
         ),
         th.Property(
             "ignore_supplied_tables",

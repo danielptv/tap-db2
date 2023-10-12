@@ -24,21 +24,21 @@ pipx install git+https://github.com/danielptv/tap-db2.git@main
 
 ## Configuration 📝
 
-| Setting                           | Required | Description                                                                                                                                                                                                                                                                                        |
-| :-------------------------------- | :------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| host                              |   True   | The DB2 hostname.                                                                                                                                                                                                                                                                                  |
-| port                              |   True   | The DB2 port.                                                                                                                                                                                                                                                                                      |
-| database                          |   True   | The DB2 database.                                                                                                                                                                                                                                                                                  |
-| schema                            |  False   | The DB2 schema.                                                                                                                                                                                                                                                                                    |
-| user                              |   True   | The DB2 username.                                                                                                                                                                                                                                                                                  |
-| password                          |   True   | The DB2 password.                                                                                                                                                                                                                                                                                  |
-| encryption      |   True   | Encryption settings for the DB2 connection. Setting this to an empty object will append 'SECURITY=SSL' to the connection string. For more information check out [python-ibmdb](https://github.com/ibmdb/python-ibmdb#example-of-ssl-connection-string).                                                                                                                                                                                                                 |
-| connection_parameters             |  False   | Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.                                                                                                                                                                                      |
-| sqlalchemy_execution_options      |  False   | Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.                                                                                                                                                                                            |
-| query_partitioning                |  False   | Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Only works for streams with a numeric primary key. |
-| ignore_supplied_tables            |  False   | Ignore DB2-supplied user tables. Defaults to 'True'. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables).                                                                                                                |
-| stream_maps                       |  False   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).                                                                                                                                                        |
-| stream_map_config                 |  False   | User-defined config values to be used within map expressions.                                                                                                                                                                                                                                      |
+| Setting                      | Required | Description                                                                                                                                                                         |
+| :--------------------------- | :------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| host                         |   True   | The DB2 hostname.                                                                                                                                                                   |
+| port                         |   True   | The DB2 port.                                                                                                                                                                       |
+| database                     |   True   | The DB2 database.                                                                                                                                                                   |
+| schema                       |  False   | The DB2 schema.                                                                                                                                                                     |
+| user                         |   True   | The DB2 username.                                                                                                                                                                   |
+| password                     |   True   | The DB2 password.                                                                                                                                                                   |
+| encryption                   |   True   | Encryption settings for the DB2 connection.                                                                                                                                         |
+| connection_parameters        |  False   | Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.                                                                       |
+| sqlalchemy_execution_options |  False   | Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.                                                                             |
+| query_partitioning           |  False   | Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Only works for streams with a numeric primary key.                |
+| ignore_supplied_tables       |  False   | Ignore DB2-supplied user tables. Defaults to 'True'. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables). |
+| stream_maps                  |  False   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).                                         |
+| stream_map_config            |  False   | User-defined config values to be used within map expressions.                                                                                                                       |
 
 A full list of supported settings and capabilities for this
 tap is available by running:
@@ -52,6 +52,81 @@ tap-db2 --about --format json
 This Singer tap will automatically import any environment variables within the working directory's
 `.env` if the `--config=ENV` is provided, such that config values will be considered if a matching
 environment variable is set either in the terminal context or in the `.env` file.
+
+### Configure encryption settings 🔒
+
+This Singer tap supports encrypted connection settings to DB2 according to the [python-ibmdb driver](https://github.com/ibmdb/python-ibmdb#example-of-ssl-connection-string).
+
+**SSL without additional options:**
+
+```yaml
+...
+plugins:
+  extractors:
+  - name: tap-db2
+    variant: danielptv
+    pip_url: tap-ibm-db2
+    config:
+      ...
+      encryption: {}
+```
+
+This will append `SECURITY=SSL;` to the connection string.
+
+**SSL using SSLServerCertificate keyword:**
+
+```yaml
+...
+plugins:
+  extractors:
+  - name: tap-db2
+    variant: danielptv
+    pip_url: tap-ibm-db2
+    config:
+      ...
+      encryption:
+        ssl_server_certificate: <Full path to the server certificate>
+```
+
+This will append `SECURITY=SSL;SSLServerCertificate=<Full path to the server certificate>;` to the connection string.
+
+**SSL using SSLClientKeyStoreDB and SSLClientKeyStoreDBPassword keywords:**
+
+```yaml
+...
+plugins:
+  extractors:
+  - name: tap-db2
+    variant: danielptv
+    pip_url: tap-ibm-db2
+    config:
+      ...
+      encryption:
+        ssl_client_key_store_db:
+          database: <Full path to the client keystore database>
+          password: <Keystore password>
+```
+
+This will append `SECURITY=SSL;SSLClientKeyStoreDB=<Full path to the client keystore database>;SSLClientKeyStoreDBPassword=<Keystore password>;` to the connection string.
+
+**SSL using SSLClientKeyStoreDB and SSLClientKeyStash keywords:**
+
+```yaml
+...
+plugins:
+  extractors:
+  - name: tap-db2
+    variant: danielptv
+    pip_url: tap-ibm-db2
+    config:
+      ...
+      encryption:
+        ssl_client_key_store_db:
+          database: <Full path to the client keystore database>
+          key_stash: <Full path to the client keystore stash>
+```
+
+This will append `SECURITY=SSL;SSLClientKeyStoreDB=<Full path to the client keystore database>;SSLClientKeyStash=<Full path to the client keystore stash>;` to the connection string.
 
 ## Usage 👷‍♀️
 
