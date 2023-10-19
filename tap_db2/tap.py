@@ -5,7 +5,7 @@ from __future__ import annotations
 from singer_sdk import SQLTap
 from singer_sdk import typing as th
 from singer_sdk.helpers._classproperty import classproperty
-from singer_sdk.helpers.capabilities import CapabilitiesEnum, PluginCapabilities
+from singer_sdk.helpers.capabilities import CapabilitiesEnum, PluginCapabilities, TapCapabilities
 
 from tap_db2.stream import DB2Stream
 
@@ -138,7 +138,11 @@ class TapDB2(SQLTap):
             A list of plugin capabilities.
         """
         return [
+            PluginCapabilities.ABOUT,
             PluginCapabilities.STREAM_MAPS,
+            TapCapabilities.CATALOG,
+            TapCapabilities.STATE,
+            TapCapabilities.DISCOVER,
         ]
 
 
