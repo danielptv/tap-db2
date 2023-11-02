@@ -18,7 +18,7 @@ packages = [
 python = ">=3.8,<3.12"
 singer-sdk = { version=">=0.31.1,<0.34.0" }
 ibm-db-sa = "0.4.0"
-sqlalchemy = "2.0.22"
+sqlalchemy = "2.0.23"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "7.4.3"
