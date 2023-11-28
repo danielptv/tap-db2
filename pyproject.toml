@@ -27,7 +27,7 @@ black = "23.11.0"
 deptry = "0.12.0"
 faker = "20.1.0"
 isort = "5.12.0"
-tox = "4.11.3"
+tox = "4.11.4"
 
 [tool.mypy]
 python_version = "3.9"
