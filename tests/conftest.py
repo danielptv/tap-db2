@@ -5,8 +5,6 @@ import sqlalchemy
 from faker import Faker
 from sqlalchemy import Column, DateTime, Integer, MetaData, String, Table, text
 
-pytest_plugins = ("singer_sdk.testing.pytest_plugin",)
-
 TEST_SQLALCHEMY_URL = "ibm_db_sa://db2inst1:password@localhost:50000/testdb;"
 
 TABLE_NAME = "TEST_TABLE"
