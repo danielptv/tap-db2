@@ -19,7 +19,7 @@ class TapDB2(SQLTap):
 
     config_jsonschema = th.PropertiesList(
         th.Property("host", th.HostnameType, required=True, description="The DB2 hostname."),
-        th.Property("port", th.StringType, required=True, description="The DB2 port."),
+        th.Property("port", th.IntegerType, required=True, description="The DB2 port."),
         th.Property("database", th.StringType, required=True, description="The DB2 database."),
         th.Property("schema", th.StringType, description="The DB2 schema."),
         th.Property("user", th.StringType, required=True, description="The DB2 username."),

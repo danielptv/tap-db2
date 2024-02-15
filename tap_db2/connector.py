@@ -28,7 +28,7 @@ class DB2Connector(SQLConnector):
         connection_url = (
             f"ibm_db_sa://{config['user']}:"
             f"{config['password']}@{config['host']}"
-            f":{config['port']}/"
+            f":{str(config['port'])}/"
             f"{config['database']};"
         )
         if "encryption" in config:
