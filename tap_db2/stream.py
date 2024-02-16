@@ -11,7 +11,7 @@ from singer_sdk import SQLStream
 from singer_sdk.connectors import SQLConnector
 from singer_sdk.helpers._state import STARTING_MARKER
 from singer_sdk.tap_base import Tap
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 
 from tap_db2.connector import DB2Connector
 
@@ -108,6 +108,12 @@ class DB2Stream(SQLStream):
 
         if self.ABORT_AT_RECORD_COUNT is not None:
             query = query.limit(self.ABORT_AT_RECORD_COUNT + 1)
+
+        filter_configs = self.config.get("filter", {})
+        if self.tap_stream_id in filter_configs:
+            query = query.where(text(filter_configs[self.tap_stream_id]["where"]))
+        elif "*" in filter_configs:
+            query = query.where(text(filter_configs["*"]["where"]))
 
         with self.connector._connect() as conn:
             if self.query_partitioning_pk is None:

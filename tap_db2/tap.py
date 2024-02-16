@@ -90,6 +90,21 @@ class TapDB2(SQLTap):
             description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Only works for streams with numeric primary keys.",
         ),
         th.Property(
+            "filter",
+            th.ObjectType(
+                additional_properties=th.CustomType(
+                    {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "where": {"type": ["string"]},
+                        },
+                    }
+                )
+            ),
+            required=False,
+            description="Apply a custom WHERE condition per stream. Unlike the filter available in stream_maps, this will be evaluated BEFORE extracting the data.",
+        ),
+        th.Property(
             "ignore_supplied_tables",
             th.BooleanType(),
             default=True,
