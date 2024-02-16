@@ -18,8 +18,8 @@ class TapDB2(SQLTap):
     default_stream_class = DB2Stream
 
     config_jsonschema = th.PropertiesList(
-        th.Property("host", th.HostnameType, required=True, description="The DB2 hostname."),
-        th.Property("port", th.IntegerType, required=True, description="The DB2 port."),
+        th.Property("host", th.HostnameType, required=True, default="localhost", description="The DB2 hostname."),
+        th.Property("port", th.IntegerType, required=True, default=50000, description="The DB2 port."),
         th.Property("database", th.StringType, required=True, description="The DB2 database."),
         th.Property("schema", th.StringType, description="The DB2 schema."),
         th.Property("user", th.StringType, required=True, description="The DB2 username."),
@@ -95,6 +95,13 @@ class TapDB2(SQLTap):
             default=True,
             required=False,
             description="Ignore DB2-supplied user tables. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables).",
+        ),
+        th.Property(
+            "ignore_views",
+            th.BooleanType(),
+            default=False,
+            required=False,
+            description="Ignore views.",
         ),
         th.Property(
             "stream_maps",

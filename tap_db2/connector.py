@@ -58,7 +58,7 @@ class DB2Connector(SQLConnector):
 
     @staticmethod
     def to_jsonschema_type(
-        sql_type: (str | sqlalchemy.types.TypeEngine | type[sqlalchemy.types.TypeEngine] | t.Any),  # noqa: ANN401
+        sql_type: str | sqlalchemy.types.TypeEngine | type[sqlalchemy.types.TypeEngine] | t.Any,  # noqa: ANN401
     ) -> dict:
         """Return a JSON Schema representation of the provided type.
 
@@ -90,8 +90,10 @@ class DB2Connector(SQLConnector):
                 inspected,
                 schema_name,
             ):
-                if not re.match(SUPPLIED_USER_TABLES_PATTERN, table_name, re.IGNORECASE) or (
-                    "ignore_supplied_tables" in self.config and not self.config["ignore_supplied_tables"]
+                if (
+                    not re.match(SUPPLIED_USER_TABLES_PATTERN, table_name, re.IGNORECASE)
+                    or (is_view and "ignore_views" in self.config and self.config["ignore_views"])
+                    or ("ignore_supplied_tables" in self.config and not self.config["ignore_supplied_tables"])
                 ):
                     # Filter by schema
                     # Connection parameter 'CURRENTSCHEMA=mySchema;' doesn't work

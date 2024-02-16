@@ -24,21 +24,22 @@ pipx install git+https://github.com/danielptv/tap-db2.git@main
 
 ## Configuration 📝
 
-| Setting                      | Required | Description                                                                                                                                                                         |
-| :--------------------------- | :------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| host                         |   True   | The DB2 hostname.                                                                                                                                                                   |
-| port                         |   True   | The DB2 port.                                                                                                                                                                       |
-| database                     |   True   | The DB2 database.                                                                                                                                                                   |
-| schema                       |  False   | The DB2 schema.                                                                                                                                                                     |
-| user                         |   True   | The DB2 username.                                                                                                                                                                   |
-| password                     |   True   | The DB2 password.                                                                                                                                                                   |
-| encryption                   |   True   | Encryption settings for the DB2 connection.                                                                                                                                         |
-| connection_parameters        |  False   | Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.                                                                       |
-| sqlalchemy_execution_options |  False   | Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.                                                                             |
-| query_partitioning           |  False   | Partition query into smaller subsets.                |
-| ignore_supplied_tables       |  False   | Ignore DB2-supplied user tables. Defaults to 'True'. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables). |
-| stream_maps                  |  False   | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).                                         |
-| stream_map_config            |  False   | User-defined config values to be used within map expressions.                                                                                                                       |
+| Setting                      | Required | Default   | Description                                                                                                                                                     |
+| :--------------------------- | :------: | --------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| host                         |   True   | localhost | The DB2 hostname.                                                                                                                                               |
+| port                         |   True   | 50000     | The DB2 port.                                                                                                                                                   |
+| database                     |   True   | None      | The DB2 database.                                                                                                                                               |
+| schema                       |  False   | None      | The DB2 schema.                                                                                                                                                 |
+| user                         |   True   | None      | The DB2 username.                                                                                                                                               |
+| password                     |   True   | None      | The DB2 password.                                                                                                                                               |
+| encryption                   |   True   | None      | Encryption settings for the DB2 connection. Disabled if omitted.                                                                                                |
+| connection_parameters        |  False   | None      | Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.                                                   |
+| sqlalchemy_execution_options |  False   | None      | Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.                                                         |
+| query_partitioning           |  False   | None      | Partition query into smaller subsets.                                                                                                                           |
+| ignore_supplied_tables       |  False   | True      | Ignore DB2-supplied user tables. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables). |
+| ignore_views                 |  False   | False     | Ignore views.                                                                                                                                                   |
+| stream_maps                  |  False   | None      | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).                     |
+| stream_map_config            |  False   | None      | User-defined config values to be used within map expressions.                                                                                                   |
 
 A full list of supported settings and capabilities for this
 tap is available by running:

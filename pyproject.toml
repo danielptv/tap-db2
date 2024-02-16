@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tap-ibm-db2"
-version = "0.6.0"
+version = "0.7.0"
 description = "`Tap-DB2` is a Singer tap for IBM DB2 data sources."
 readme = "README.md"
 authors = ["Daniel Purtov"]
@@ -8,6 +8,16 @@ keywords = [
     "ELT",
     "IBM DB2",
     "DB2"
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
 ]
 license = "MIT"
 packages = [

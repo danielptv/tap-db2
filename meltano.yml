@@ -22,13 +22,13 @@ plugins:
     - name: schema
     - name: user
     - name: password
-      kind: password
+      sensitive: true
     - name: encryption
       kind: object
     - name: encryption.ssl_server_certificate
     - name: encryption.ssl_client_key_store_db.database
     - name: encryption.ssl_client_key_store_db.password
-      kind: password
+      sensitive: true
     - name: encryption.ssl_client_key_store_db.key_stash
     - name: connection_parameters
       kind: object
