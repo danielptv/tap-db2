@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tap-ibm-db2"
-version = "0.8.0"
+version = "0.0.0"
 description = "`Tap-DB2` is a Singer tap for IBM DB2 data sources."
 readme = "README.md"
 authors = ["Daniel Purtov"]
@@ -67,8 +67,13 @@ known-first-party = ["tap_db2"]
 convention = "google"
 
 [build-system]
-requires = ["poetry-core>=1.0.8"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core==1.8.1", "poetry-dynamic-versioning==1.2.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
 
 [tool.poetry.scripts]
 # CLI declaration
