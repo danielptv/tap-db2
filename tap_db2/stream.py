@@ -25,7 +25,6 @@ class DB2Stream(SQLStream):
         super().__init__(tap, catalog_entry, connector)
         self.query_partitioning_pk = None
         self.query_partitioning_size = None
-        self._is_sorted = super().is_sorted
 
         partitioning_configs = self.config.get("query_partitioning", {})
         if self.tap_stream_id in partitioning_configs:
@@ -34,17 +33,6 @@ class DB2Stream(SQLStream):
         elif "*" in partitioning_configs:
             self.query_partitioning_pk = partitioning_configs["*"]["primary_key"]
             self.query_partitioning_size = partitioning_configs["*"]["partition_size"]
-
-        if self.replication_key and self.query_partitioning_pk and self.replication_key != self.query_partitioning_pk:
-            self.is_sorted = False
-
-    @property
-    def is_sorted(self):
-        return self._is_sorted
-
-    @is_sorted.setter
-    def is_sorted(self, value):
-        self._is_sorted = value
 
     def get_starting_replication_key_value(
         self,
