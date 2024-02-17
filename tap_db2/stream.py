@@ -5,13 +5,12 @@ from __future__ import annotations
 import typing as t
 from datetime import datetime
 
-import ibm_db_sa
-import sqlalchemy  # noqa: TCH002
+import ibm_db_sa  # type: ignore
+import sqlalchemy as sa
 from singer_sdk import SQLStream
 from singer_sdk.connectors import SQLConnector
 from singer_sdk.helpers._state import STARTING_MARKER
 from singer_sdk.tap_base import Tap
-from sqlalchemy import func, select, text
 
 from tap_db2.connector import DB2Connector
 
@@ -21,15 +20,30 @@ class DB2Stream(SQLStream):
 
     connector_class = DB2Connector
 
-    def __init__(self, tap: Tap, catalog_entry: dict, connector: SQLConnector | None = None) -> None:
+    def __init__(
+        self, tap: Tap, catalog_entry: dict, connector: SQLConnector | None = None
+    ) -> None:
+        """Initialize the database stream.
+
+        If connector is omitted, a new connector will be created.
+
+        Args:
+            tap: The parent tap object.
+            catalog_entry: Catalog entry dict.
+            connector: Optional connector to reuse.
+        """
         super().__init__(tap, catalog_entry, connector)
         self.query_partitioning_pk = None
         self.query_partitioning_size = None
 
         partitioning_configs = self.config.get("query_partitioning", {})
         if self.tap_stream_id in partitioning_configs:
-            self.query_partitioning_pk = partitioning_configs[self.tap_stream_id]["primary_key"]
-            self.query_partitioning_size = partitioning_configs[self.tap_stream_id]["partition_size"]
+            self.query_partitioning_pk = partitioning_configs[self.tap_stream_id][
+                "primary_key"
+            ]
+            self.query_partitioning_size = partitioning_configs[self.tap_stream_id][
+                "partition_size"
+            ]
         elif "*" in partitioning_configs:
             self.query_partitioning_pk = partitioning_configs["*"]["primary_key"]
             self.query_partitioning_size = partitioning_configs["*"]["partition_size"]
@@ -37,7 +51,7 @@ class DB2Stream(SQLStream):
     def get_starting_replication_key_value(
         self,
         context: dict | None,
-    ) -> t.Any | None:  # noqa: ANN401
+    ) -> t.Any | None:
         """Get starting replication key.
 
         Args:
@@ -48,10 +62,10 @@ class DB2Stream(SQLStream):
         """
         state = self.get_context_state(context)
 
-        if not state or not state.get(STARTING_MARKER):
+        if not state or not (timestamp_str := state.get(STARTING_MARKER)):
             return None
         # Format timestamp to precision supported by DB2 queries
-        timestamp = datetime.fromisoformat(state.get(STARTING_MARKER))
+        timestamp = datetime.fromisoformat(str(timestamp_str))
         return timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
     # Get records from stream
@@ -99,9 +113,9 @@ class DB2Stream(SQLStream):
 
         filter_configs = self.config.get("filter", {})
         if self.tap_stream_id in filter_configs:
-            query = query.where(text(filter_configs[self.tap_stream_id]["where"]))
+            query = query.where(sa.text(filter_configs[self.tap_stream_id]["where"]))
         elif "*" in filter_configs:
-            query = query.where(text(filter_configs["*"]["where"]))
+            query = query.where(sa.text(filter_configs["*"]["where"]))
 
         with self.connector._connect() as conn:
             if self.query_partitioning_pk is None:
@@ -117,16 +131,20 @@ class DB2Stream(SQLStream):
                 primary_key = self.query_partitioning_pk
                 lower_limit = None
 
-                termination_query = select(func.count(table.columns[primary_key]))  # pylint: disable=not-callable
+                termination_query = sa.select(sa.func.count(table.columns[primary_key]))
                 if query.whereclause is not None:
                     termination_query = termination_query.where(query.whereclause)
-                termination_limit = conn.execute(termination_query).first()[0]
+                termination_query_result = conn.execute(termination_query).first()
+                assert termination_query_result is not None, "Invalid termination query"
+                termination_limit = int(str(termination_query_result[0]))
                 fetched_count = 0
 
                 while fetched_count < termination_limit:
                     limited_query = query.limit(limit)
                     if lower_limit is not None:
-                        limited_query = limited_query.where(table.columns[primary_key] > lower_limit)
+                        limited_query = limited_query.where(
+                            table.columns[primary_key] > lower_limit
+                        )
 
                     for record in conn.execute(limited_query):
                         transformed_record = self.post_process(dict(record._mapping))
@@ -138,14 +156,14 @@ class DB2Stream(SQLStream):
                         yield transformed_record
 
 
-class ROWID(sqlalchemy.sql.sqltypes.String):
-    """Custom SQL type for 'ROWID'"""
+class ROWID(sa.sql.sqltypes.String):
+    """Custom SQL type for 'ROWID'."""
 
     __visit_name__ = "ROWID"
 
 
-class VARG(sqlalchemy.sql.sqltypes.String):
-    """Custom SQL type for 'VARG'"""
+class VARG(sa.sql.sqltypes.String):
+    """Custom SQL type for 'VARG'."""
 
     __visit_name__ = "VARG"
 

@@ -30,7 +30,5 @@ repos:
   - id: mypy
     exclude: tests
     additional_dependencies:
-    - types-paramiko
-    - types-simplejson
     - types-sqlalchemy
     - types-jsonschema
