@@ -37,3 +37,6 @@ jobs:
     - name: Test with pytest
       run: |
         poetry run pytest
+    - name: Lint with tox
+      run: |
+        poetry run tox -e lint

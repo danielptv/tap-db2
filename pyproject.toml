@@ -2,12 +2,17 @@
 name = "tap-ibm-db2"
 version = "0.0.0"
 description = "`Tap-DB2` is a Singer tap for IBM DB2 data sources."
-readme = "README.md"
 authors = ["Daniel Purtov"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://meltano.com"
+repository = "https://github.com/danielptv/tap-db2"
 keywords = [
-    "ELT",
+    "DB2",
     "IBM DB2",
-    "DB2"
+    "ELT",
+    "Meltano",
+    "Meltano SDK"
 ]
 classifiers = [
     "Intended Audience :: Developers",
@@ -19,62 +24,61 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
-license = "MIT"
 packages = [
     { include = "tap_db2" },
 ]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
-singer-sdk = { version=">=0.31.1,<0.36.0" }
+singer-sdk = "0.35.1"
 ibm-db-sa = "0.4.0"
 sqlalchemy = "2.0.27"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "8.0.0"
-singer-sdk = { version=">=0.31.1,<0.36.0", extras = ["testing"] }
-black = "24.2.0"
-deptry = "0.12.0"
 faker = "23.2.1"
-isort = "5.13.2"
 tox = "4.12.1"
+mypy = "1.8.0"
+ruff = "0.2.1"
+types-sqlalchemy = "1.4.53.38"
+types-jsonschema = "^4.21.0.20240118"
 
 [tool.mypy]
-python_version = "3.9"
-warn_unused_configs = true
-plugins = "sqlmypy"
-
-[tool.black]
-line-length = 120
-
-[tool.ruff]
-ignore = [
-    "ANN101",  # missing-type-self
-    "ANN102",  # missing-type-cls
-]
-select = ["ALL"]
-src = ["tap_db2"]
-target-version = "py37"
-
-
-[tool.ruff.flake8-annotations]
-allow-star-arg-any = true
-
-[tool.ruff.isort]
-known-first-party = ["tap_db2"]
-
-[tool.ruff.pydocstyle]
-convention = "google"
+exclude = "tests"
 
 [build-system]
 requires = ["poetry-core==1.8.1", "poetry-dynamic-versioning==1.2.0"]
 build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry.scripts]
+# CLI declaration
+tap-db2 = 'tap_db2.tap:TapDB2.cli'
 
 [tool.poetry-dynamic-versioning]
 enable = true
 vcs = "git"
 style = "semver"
 
-[tool.poetry.scripts]
-# CLI declaration
-tap-db2 = 'tap_db2.tap:TapDB2.cli'
+[tool.ruff]
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+  "F",   # Pyflakes
+  "W",   # pycodestyle warnings
+  "E",   # pycodestyle errors
+  "I",   # isort
+  "N",   # pep8-naming
+  "D",   # pydocsyle
+  "ICN", # flake8-import-conventions
+  "RUF", # ruff
+]
+
+[tool.ruff.lint.flake8-import-conventions]
+banned-from = ["sqlalchemy"]
+
+[tool.ruff.lint.flake8-import-conventions.extend-aliases]
+sqlalchemy = "sa"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

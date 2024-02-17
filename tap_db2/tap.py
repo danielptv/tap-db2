@@ -5,7 +5,11 @@ from __future__ import annotations
 from singer_sdk import SQLTap
 from singer_sdk import typing as th
 from singer_sdk.helpers._classproperty import classproperty
-from singer_sdk.helpers.capabilities import CapabilitiesEnum, PluginCapabilities, TapCapabilities
+from singer_sdk.helpers.capabilities import (
+    CapabilitiesEnum,
+    PluginCapabilities,
+    TapCapabilities,
+)
 
 from tap_db2.stream import DB2Stream
 
@@ -18,12 +22,34 @@ class TapDB2(SQLTap):
     default_stream_class = DB2Stream
 
     config_jsonschema = th.PropertiesList(
-        th.Property("host", th.HostnameType, required=True, default="localhost", description="The DB2 hostname."),
-        th.Property("port", th.IntegerType, required=True, default=50000, description="The DB2 port."),
-        th.Property("database", th.StringType, required=True, description="The DB2 database."),
+        th.Property(
+            "host",
+            th.HostnameType,
+            required=True,
+            default="localhost",
+            description="The DB2 hostname.",
+        ),
+        th.Property(
+            "port",
+            th.IntegerType,
+            required=True,
+            default=50000,
+            description="The DB2 port.",
+        ),
+        th.Property(
+            "database", th.StringType, required=True, description="The DB2 database."
+        ),
         th.Property("schema", th.StringType, description="The DB2 schema."),
-        th.Property("user", th.StringType, required=True, description="The DB2 username."),
-        th.Property("password", th.StringType, required=True, secret=True, description="The DB2 password."),
+        th.Property(
+            "user", th.StringType, required=True, description="The DB2 username."
+        ),
+        th.Property(
+            "password",
+            th.StringType,
+            required=True,
+            secret=True,
+            description="The DB2 password.",
+        ),
         th.Property(
             "encryption",
             th.ObjectType(
@@ -40,7 +66,7 @@ class TapDB2(SQLTap):
                             "database",
                             th.StringType(),
                             required=True,
-                            description="The full path to the client keystore database.",
+                            description="The full path to the client keystore database.",  # noqa: E501
                         ),
                         th.Property(
                             "password",
@@ -59,19 +85,19 @@ class TapDB2(SQLTap):
                 ),
             ),
             required=False,
-            description="Encryption settings for the DB2 connection. Setting this to an empty object will append 'SECURITY=SSL' to the connection string. For more information check out [python-ibmdb](https://github.com/ibmdb/python-ibmdb#example-of-ssl-connection-string).",
+            description="Encryption settings for the DB2 connection. Setting this to an empty object will append 'SECURITY=SSL' to the connection string. For more information check out [python-ibmdb](https://github.com/ibmdb/python-ibmdb#example-of-ssl-connection-string).",  # noqa: E501
         ),
         th.Property(
             "connection_parameters",
             th.ObjectType(),
             required=False,
-            description="Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.",
+            description="Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.",  # noqa: E501
         ),
         th.Property(
             "sqlalchemy_execution_options",
             th.ObjectType(),
             required=False,
-            description="Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.",
+            description="Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.",  # noqa: E501
         ),
         th.Property(
             "query_partitioning",
@@ -87,7 +113,7 @@ class TapDB2(SQLTap):
                 )
             ),
             required=False,
-            description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Only works for streams with numeric primary keys.",
+            description="Partition query into smaller subsets. Useful when working with DB2 that has set strict resource limits per query. Only works for streams with numeric primary keys.",  # noqa: E501
         ),
         th.Property(
             "filter",
@@ -102,14 +128,14 @@ class TapDB2(SQLTap):
                 )
             ),
             required=False,
-            description="Apply a custom WHERE condition per stream. Unlike the filter available in stream_maps, this will be evaluated BEFORE extracting the data.",
+            description="Apply a custom WHERE condition per stream. Unlike the filter available in stream_maps, this will be evaluated BEFORE extracting the data.",  # noqa: E501
         ),
         th.Property(
             "ignore_supplied_tables",
             th.BooleanType(),
             default=True,
             required=False,
-            description="Ignore DB2-supplied user tables. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables).",
+            description="Ignore DB2-supplied user tables. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables).",  # noqa: E501
         ),
         th.Property(
             "ignore_views",
@@ -142,7 +168,7 @@ class TapDB2(SQLTap):
                 ),
             ),
             required=False,
-            description="Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).",
+            description="Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html).",  # noqa: E501
         ),
         th.Property(
             "stream_map_config",
@@ -169,4 +195,4 @@ class TapDB2(SQLTap):
 
 
 if __name__ == "__main__":
-    TapDB2.cli()  # pylint: disable=no-value-for-parameter
+    TapDB2.cli()
