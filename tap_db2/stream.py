@@ -130,8 +130,8 @@ class DB2Stream(SQLStream):
                 lower_limit = None
 
                 termination_query = select(func.count(table.columns[primary_key]))  # pylint: disable=not-callable
-                if self.replication_key and start_val:
-                    termination_query = termination_query.where(replication_key_col >= start_val)
+                if query.whereclause is not None:
+                    termination_query = termination_query.where(query.whereclause)
                 termination_limit = conn.execute(termination_query).first()[0]
                 fetched_count = 0
 
