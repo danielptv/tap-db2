@@ -531,19 +531,35 @@ docs = ["Sphinx", "furo"]
 test = ["objgraph", "psutil"]
 
 [[package]]
-name = "ibm_db"
-version = "3.2.1"
+name = "ibm-db"
+version = "3.2.2"
 description = "Python DBI driver for DB2 (LUW, zOS, i5) and IDS"
 optional = false
 python-versions = "*"
-files = []
-develop = false
-
-[package.source]
-type = "git"
-url = "https://github.com/ibmdb/python-ibmdb"
-reference = "master"
-resolved_reference = "89e5f29340170ab893a7d426ae994312809d4bad"
+files = [
+    {file = "ibm_db-3.2.2-cp310-cp310-macosx_10_15_x86_64.whl", hash = "sha256:ed9e1773061388b0af48cb2aacb0d7c388d3ef6af464474cd322bbfb03247b01"},
+    {file = "ibm_db-3.2.2-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:72b97c9a94165d5b3b58097bc556a256fc7369be40572174960bc1e604201758"},
+    {file = "ibm_db-3.2.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3e489c70f581da063acc21bb8ebc850b8b988d31b8ab5f1b8a24f1f9cc324aad"},
+    {file = "ibm_db-3.2.2-cp310-cp310-win32.whl", hash = "sha256:7764ec69a8c77b1421ecc19fae7a8722102d4979ee87c73d2f2dd416289ed65e"},
+    {file = "ibm_db-3.2.2-cp311-cp311-macosx_10_15_x86_64.whl", hash = "sha256:335c40f846ead8eb85b3ede63a3e178d7a5e8a0ed12d73d33ff99405eb693dff"},
+    {file = "ibm_db-3.2.2-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:e377f476b394654f09c041f5b39ce24974a9ca1c31ca7bfb740b6069a17e27b3"},
+    {file = "ibm_db-3.2.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0adb9fc6ccae3ee3e8a4188b962e5b37e1a46fcac11afc4bc81badadec8ae560"},
+    {file = "ibm_db-3.2.2-cp311-cp311-win32.whl", hash = "sha256:38e7af93ca942f6d9215ccaeb76465de4e149afeb4d17b7b8d323a084e521805"},
+    {file = "ibm_db-3.2.2-cp312-cp312-win32.whl", hash = "sha256:2e0e72ab22b73c8e7796bd8ecf7a7ee16ec915f8712ea0e8e13ca334a03ebbf9"},
+    {file = "ibm_db-3.2.2-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:de388f74537fef538a7817719900e0aa5321b827bd5310ac3424a9a7c78db640"},
+    {file = "ibm_db-3.2.2-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ab2fc22577963e52350837aa5e42f7336e927c49e4185d3d72d749e534e2cdba"},
+    {file = "ibm_db-3.2.2-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fb58ec19d75eb00cbf3aa5c30bd4e5bce604ff30b057a7fd84cf140d1bc6ae5f"},
+    {file = "ibm_db-3.2.2-cp37-cp37m-win32.whl", hash = "sha256:d94cddb9b8a9de1fd09d69290088a3fb83316750ccaa4f26612e3f6cdd22694e"},
+    {file = "ibm_db-3.2.2-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:f3ee98c229ecb3814ade52ae5b0e3666d1e042f6783e8a4736a574489e6d1bc6"},
+    {file = "ibm_db-3.2.2-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ac354b311a1652f99a5de60df14517058d0d05bda95c6b12e80526fa03c1c5b9"},
+    {file = "ibm_db-3.2.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9e7e47528e89248675811dc2db007e469c9778b04921fe533be152f8ddf4cf2a"},
+    {file = "ibm_db-3.2.2-cp38-cp38-win32.whl", hash = "sha256:ff2fe67db0eebbccc7f46ca5ff24a64c436391e5db0ef754944bc038ae46c06b"},
+    {file = "ibm_db-3.2.2-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:7a84ca3473b971c16937906bc664b22855630e785233349d2d8cec3c1be4d1af"},
+    {file = "ibm_db-3.2.2-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4d917a05abde860b81b63647f9d311180c475a2029035b45447fffc3882fb27d"},
+    {file = "ibm_db-3.2.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c43426271b54dfd4704e31164963af0fdc7f1533b33cbced11592d5f05f0a51c"},
+    {file = "ibm_db-3.2.2-cp39-cp39-win32.whl", hash = "sha256:1794645dffffe8b4589280cdba3315c7b20bd0b9b12f84b2146606d6d7d6e2c8"},
+    {file = "ibm_db-3.2.2.tar.gz", hash = "sha256:656c1bc0b12f7c44c26a3feaf427ed77050272be52b4d8c9250e505b8e78a4e7"},
+]
 
 [[package]]
 name = "ibm-db-sa"
@@ -986,13 +1002,13 @@ testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "no
 
 [[package]]
 name = "python-dateutil"
-version = "2.8.2"
+version = "2.9.0.post0"
 description = "Extensions to the standard Python datetime module"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 files = [
-    {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
-    {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
+    {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
+    {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
 ]
 
 [package.dependencies]
@@ -1657,4 +1673,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "24b3c4fd949bffdd00ce4a0dd68ea03a959baecc4c6e82866eac6a74e2dc1317"
+content-hash = "af7eb4cd6d939f7497f388a4d7946b78ae43a4c1439f830e1b1384b03390738b"
