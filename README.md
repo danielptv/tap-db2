@@ -4,6 +4,8 @@
 <a href="https://github.com/danielptv/tap-db2/actions/"><img alt="Actions Status" src="https://github.com/danielptv/tap-db2/actions/workflows/test.yml/badge.svg"></a>
 <a href="https://github.com/danielptv/tap-db2/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+<img alt="PyPI - Version" src="https://img.shields.io/pypi/v/tap-ibm-db2">
+<img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/tap-ibm-db2">
 </p>
 
 `Tap-DB2` is a Singer tap for IBM DB2 data sources. Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
