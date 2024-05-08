@@ -42,7 +42,7 @@ tox = "4.14.1"
 mypy = "1.9.0"
 ruff = "0.4.3"
 types-sqlalchemy = "1.4.53.38"
-types-jsonschema = "4.21.0.20240118"
+types-jsonschema = "4.22.0.20240501"
 
 [tool.mypy]
 exclude = "tests"
