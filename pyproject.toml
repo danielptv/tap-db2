@@ -36,7 +36,7 @@ ibm-db-sa = "0.4.0"
 sqlalchemy = "2.0.30"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "8.1.1"
+pytest = "8.2.0"
 faker = "25.0.1"
 tox = "4.15.0"
 mypy = "1.10.0"
