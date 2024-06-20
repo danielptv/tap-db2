@@ -40,7 +40,7 @@ pytest = "8.2.1"
 faker = "25.2.0"
 tox = "4.15.0"
 mypy = "1.10.0"
-ruff = "0.4.5"
+ruff = "0.4.10"
 types-sqlalchemy = "1.4.53.38"
 types-jsonschema = "4.22.0.20240501"
 
