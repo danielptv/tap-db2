@@ -10,6 +10,7 @@ import sqlalchemy as sa
 from singer_sdk import SQLStream
 from singer_sdk.connectors import SQLConnector
 from singer_sdk.helpers._state import STARTING_MARKER
+from singer_sdk.helpers.types import Context
 from singer_sdk.tap_base import Tap
 
 from tap_db2.connector import DB2Connector
@@ -50,7 +51,7 @@ class DB2Stream(SQLStream):
 
     def get_starting_replication_key_value(
         self,
-        context: dict | None,
+        context: Context | None,
     ) -> t.Any | None:
         """Get starting replication key.
 
@@ -69,7 +70,7 @@ class DB2Stream(SQLStream):
         return timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
     # Get records from stream
-    def get_records(self, context: dict | None) -> t.Iterable[dict[str, t.Any]]:
+    def get_records(self, context: Context | None) -> t.Iterable[dict[str, t.Any]]:
         """Return a generator of record-type dictionary objects.
 
         If the stream has a replication_key value defined, records will be sorted by the
