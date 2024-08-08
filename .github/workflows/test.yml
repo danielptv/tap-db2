@@ -12,7 +12,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Start DB2 container
-      run: docker-compose -f "docker-compose.yml" up -d
+      run: docker compose -f "docker-compose.yml" up -d
     - name: Await DB2 initialization
       run: |
         sleep 30
