@@ -416,13 +416,13 @@ files = [
 
 [[package]]
 name = "ibm-db-sa"
-version = "0.4.0"
+version = "0.4.1"
 description = "SQLAlchemy support for IBM Data Servers"
 optional = false
 python-versions = "*"
 files = [
-    {file = "ibm_db_sa-0.4.0-py3-none-any.whl", hash = "sha256:03cea38a06e41a823d657559bca93ba458382a90f5c4f7d80bb9e2a78234a6d3"},
-    {file = "ibm_db_sa-0.4.0.tar.gz", hash = "sha256:75d536407e5966f1dc747b6322938c4ad5d63b104edb834d667d03e64efef15b"},
+    {file = "ibm_db_sa-0.4.1-py3-none-any.whl", hash = "sha256:49926ba9799e6ebd9ddd847141537c83d179ecf32fe24b7e997ac4614d3f616a"},
+    {file = "ibm_db_sa-0.4.1.tar.gz", hash = "sha256:a46df130a3681646490925cf4e1bca12b46283f71eea39b70b4f9a56e95341ac"},
 ]
 
 [package.dependencies]
@@ -1384,4 +1384,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "58b9a82d97fadec17306500a49f12bd8881686cf4a8accab4322eb2301adb1ab"
+content-hash = "382b6c42e2d20f552011412cbb51c2d04b375e364f7a190127eef151516d0025"
