@@ -37,7 +37,7 @@ sqlalchemy = "2.0.32"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "8.3.2"
-faker = "26.0.0"
+faker = "28.4.1"
 tox = "4.16.0"
 mypy = "1.11.1"
 ruff = "0.5.6"
