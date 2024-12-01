@@ -33,7 +33,7 @@ packages = [
 python = ">=3.8,<4"
 singer-sdk = "0.42.1"
 ibm-db-sa = "0.4.1"
-sqlalchemy = "2.0.32"
+sqlalchemy = "2.0.36"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "8.3.3"
