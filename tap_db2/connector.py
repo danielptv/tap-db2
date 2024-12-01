@@ -56,8 +56,8 @@ class DB2Connector(SQLConnector):
             return sa.create_engine(self.sqlalchemy_url, **sqlalchemy_connection_kwargs)
         return sa.create_engine(self.sqlalchemy_url)
 
-    @staticmethod
     def to_jsonschema_type(
+        self,
         sql_type: str | TypeEngine | type[TypeEngine] | t.Any,
     ) -> dict:
         """Return a JSON Schema representation of the provided type.
@@ -72,7 +72,7 @@ class DB2Connector(SQLConnector):
         if isinstance(sql_type, sa.DATE):
             return th.DateTimeType.type_dict
 
-        return SQLConnector.to_jsonschema_type(sql_type)
+        return SQLConnector.to_jsonschema_type(self, sql_type)
 
     def discover_catalog_entries(self) -> list[dict]:
         """Return a list of catalog entries from discovery.
