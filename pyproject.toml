@@ -7,6 +7,7 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://meltano.com"
 repository = "https://github.com/danielptv/tap-db2"
+documentation = "https://github.com/danielptv/tap-db2/blob/main/README.md"
 keywords = [
     "DB2",
     "IBM DB2",
@@ -18,11 +19,11 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 packages = [
@@ -30,7 +31,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4"
+python = ">=3.9"
 singer-sdk = "0.42.1"
 ibm-db-sa = "0.4.1"
 sqlalchemy = "2.0.36"
@@ -61,18 +62,25 @@ vcs = "git"
 style = "semver"
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 select = [
-  "F",   # Pyflakes
-  "W",   # pycodestyle warnings
-  "E",   # pycodestyle errors
-  "I",   # isort
-  "N",   # pep8-naming
-  "D",   # pydocsyle
-  "ICN", # flake8-import-conventions
-  "RUF", # ruff
+  "F",    # Pyflakes
+  "W",    # pycodestyle warnings
+  "E",    # pycodestyle errors
+  "FA",   # flake8-future-annotations
+  "I",    # isort
+  "N",    # pep8-naming
+  "D",    # pydocsyle
+  "UP",   # pyupgrade
+  "ICN",  # flake8-import-conventions
+  "RET",  # flake8-return
+  "SIM",  # flake8-simplify
+  "TCH",  # flake8-type-checking
+  "PL",   # Pylint
+  "PERF", # Perflint
+  "RUF",  # ruff
 ]
 
 [tool.ruff.lint.flake8-import-conventions]
