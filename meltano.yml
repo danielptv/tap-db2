@@ -34,7 +34,7 @@ plugins:
       kind: object
     - name: sqlalchemy_execution_options
       kind: object
-    - name: query_partitioning
+    - name: query_partition
       kind: object
     - name: ignore_supplied_tables
       kind: boolean

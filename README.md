@@ -37,7 +37,7 @@ pipx install git+https://github.com/danielptv/tap-db2.git@main
 | encryption                   |   True   | None      | Encryption settings for the DB2 connection. Disabled if omitted.                                                                                                |
 | connection_parameters        |  False   | None      | Additional parameters to be appended to the connection string. This is an objects containing key-value pairs.                                                   |
 | sqlalchemy_execution_options |  False   | None      | Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.                                                         |
-| query_partitioning           |  False   | None      | Partition query into smaller subsets.                                                                                                                           |
+| query_partition              |  False   | None      | Partition query into smaller subsets.                                                                                                                           |
 | filter                       |  False   | None      | Apply a custom WHERE condition per stream. Unlike the filter available in stream_maps, this will be evaluated BEFORE extracting the data.                       |
 | ignore_supplied_tables       |  False   | True      | Ignore DB2-supplied user tables. For more info check out [Db2-supplied user tables](https://www.ibm.com/docs/en/db2-for-zos/12?topic=db2-supplied-user-tables). |
 | ignore_views                 |  False   | False     | Ignore views.                                                                                                                                                   |
@@ -147,13 +147,13 @@ plugins:
     pip_url: tap-ibm-db2
     config:
       ...
-      query_partitioning:
+      query_partition:
       <stream>:
-        primary_key: <primary key>
+        partition_key: <partition_key>
         partition_size: 1000
 ```
 
-Replace `<stream>` with the stream name and `<primary key>` with the stream's primary key. Use `*` to apply a query partitioning setting to all streams not explicitly declared.
+Replace `<stream>` with the stream name and `<partition_key>` with the stream's partition key. Use `*` to apply a query partitioning setting to all streams not explicitly declared.
 
 ## Usage 👷‍♀️
 

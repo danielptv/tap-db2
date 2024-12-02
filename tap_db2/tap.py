@@ -100,13 +100,13 @@ class TapDB2(SQLTap):
             description="Additional execution options to be passed to SQLAlchemy. This is an objects containing key-value pairs.",  # noqa: E501
         ),
         th.Property(
-            "query_partitioning",
+            "query_partition",
             th.ObjectType(
                 additional_properties=th.CustomType(
                     {
                         "type": ["object", "null"],
                         "properties": {
-                            "primary_key": {"type": ["string"]},
+                            "partition_key": {"type": ["string"]},
                             "partition_size": {"type": ["integer"]},
                         },
                     }

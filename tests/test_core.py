@@ -15,10 +15,10 @@ TEST_CONFIG = {
     "password": "password",
 }
 
-TEST_CONFIG_QUERY_PARTITIONING = {
+TEST_CONFIG_QUERY_PARTITION = {
     **TEST_CONFIG,
-    "query_partitioning": {
-        "db2inst1-test_table": {"primary_key": "id", "partition_size": 5}
+    "query_partition": {
+        "db2inst1-test_table": {"partition_key_key": "id", "partition_size": 5}
     },
 }
 
@@ -27,6 +27,6 @@ TestTapDB2 = get_tap_test_class(
 )
 TestTapDB2WithQueryPartitioning = get_tap_test_class(
     tap_class=TapDB2,
-    config=TEST_CONFIG_QUERY_PARTITIONING,
+    config=TEST_CONFIG_QUERY_PARTITION,
     catalog="tests/data/catalog.json",
 )
