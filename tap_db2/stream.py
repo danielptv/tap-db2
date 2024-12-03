@@ -98,7 +98,7 @@ class DB2Stream(SQLStream):
                     yield transformed_record
 
             else:
-                return self._get_partitioned_records(query, table, conn)
+                yield from self._get_partitioned_records(query, table, conn)
 
     def _get_partition_config(self) -> tuple[str | None, int | None]:
         partitioning_configs = self.config.get("query_partition", {})
