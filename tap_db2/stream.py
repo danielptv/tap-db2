@@ -9,9 +9,11 @@ import ibm_db_sa  # type: ignore
 import sqlalchemy as sa
 from singer_sdk import SQLStream
 from singer_sdk.helpers._state import STARTING_MARKER
-from singer_sdk.helpers.types import Context
 
 from tap_db2.connector import DB2Connector
+
+if t.TYPE_CHECKING:
+    from singer_sdk.helpers.types import Context
 
 
 class DB2Stream(SQLStream):
@@ -84,11 +86,7 @@ class DB2Stream(SQLStream):
         if self.ABORT_AT_RECORD_COUNT is not None:
             query = query.limit(self.ABORT_AT_RECORD_COUNT + 1)
 
-        filter_configs = self.config.get("filter", {})
-        if self.tap_stream_id in filter_configs:
-            query = query.where(sa.text(filter_configs[self.tap_stream_id]["where"]))
-        elif "*" in filter_configs:
-            query = query.where(sa.text(filter_configs["*"]["where"]))
+        query = self._apply_filter_config(query)
 
         with self.connector._connect() as conn:
             if partition_key is None:
@@ -100,35 +98,9 @@ class DB2Stream(SQLStream):
                     yield transformed_record
 
             else:
-                lower_limit = None
+                return self._get_partitioned_records(query, table, conn)
 
-                termination_query = sa.select(
-                    sa.func.count(table.columns[partition_key])
-                )
-                if query.whereclause is not None:
-                    termination_query = termination_query.where(query.whereclause)
-                termination_query_result = conn.execute(termination_query).first()
-                assert termination_query_result is not None, "Invalid termination query"
-                termination_limit = int(str(termination_query_result[0]))
-                fetched_count = 0
-
-                while fetched_count < termination_limit:
-                    limited_query = query.limit(partition_size)
-                    if lower_limit is not None:
-                        limited_query = limited_query.where(
-                            table.columns[partition_key] > lower_limit
-                        )
-                    for record in conn.execute(limited_query):
-                        transformed_record = self.post_process(dict(record._mapping))
-
-                        if transformed_record is None:
-                            # Record filtered out during post_process()
-                            continue
-                        lower_limit = transformed_record[partition_key]
-                        fetched_count += 1
-                        yield transformed_record
-
-    def _get_partition_config(self) -> t.Tuple[t.Optional[str], t.Optional[int]]:
+    def _get_partition_config(self) -> tuple[str | None, int | None]:
         partitioning_configs = self.config.get("query_partition", {})
         partition_config = partitioning_configs.get(
             self.tap_stream_id
@@ -141,6 +113,44 @@ class DB2Stream(SQLStream):
             partition_key, partition_size = None, None
 
         return partition_key, partition_size
+
+    def _apply_filter_config(self, query: sa.sql.select) -> sa.sql.select:
+        filter_configs = self.config.get("filter", {})
+        if self.tap_stream_id in filter_configs:
+            query = query.where(sa.text(filter_configs[self.tap_stream_id]["where"]))
+        elif "*" in filter_configs:
+            query = query.where(sa.text(filter_configs["*"]["where"]))
+        return query
+
+    def _get_partitioned_records(
+        self, query: sa.sql.select, table: sa.Table, conn: sa.engine.Connection
+    ) -> t.Iterable[dict[str, t.Any]]:
+        partition_key, partition_size = self._get_partition_config()
+        lower_limit = None
+
+        termination_query = sa.select(sa.func.count(table.columns[partition_key]))
+        if query.whereclause is not None:
+            termination_query = termination_query.where(query.whereclause)
+        termination_query_result = conn.execute(termination_query).first()
+        assert termination_query_result is not None, "Invalid termination query"
+        termination_limit = int(str(termination_query_result[0]))
+        fetched_count = 0
+
+        while fetched_count < termination_limit:
+            limited_query = query.limit(partition_size)
+            if lower_limit is not None:
+                limited_query = limited_query.where(
+                    table.columns[partition_key] > lower_limit
+                )
+            for record in conn.execute(limited_query):
+                transformed_record = self.post_process(dict(record._mapping))
+
+                if transformed_record is None:
+                    # Record filtered out during post_process()
+                    continue
+                lower_limit = transformed_record[partition_key]
+                fetched_count += 1
+                yield transformed_record
 
     @property
     def is_sorted(self) -> bool:
