@@ -8,8 +8,10 @@ import typing as t
 import sqlalchemy as sa
 from singer_sdk import SQLConnector
 from singer_sdk import typing as th
-from sqlalchemy.engine import Engine
-from sqlalchemy.types import TypeEngine
+
+if t.TYPE_CHECKING:
+    from sqlalchemy.engine import Engine
+    from sqlalchemy.types import TypeEngine
 
 SUPPLIED_USER_TABLES_PATTERN = r"^(DSN_|PLAN_TABLE)"
 
@@ -105,9 +107,7 @@ class DB2Connector(SQLConnector):
                     # Filter by schema
                     # Connection parameter 'CURRENTSCHEMA=mySchema;' doesn't work
                     # https://www.ibm.com/support/pages/525-error-nullidsysstat-package-when-trying-set-current-schema-against-db2-zos-database
-                    target_schema = (
-                        self.config["schema"] if "schema" in self.config else None
-                    )
+                    target_schema = self.config.get("schema", None)
                     if (
                         target_schema is None
                         or target_schema.strip().lower() == schema_name.strip().lower()
