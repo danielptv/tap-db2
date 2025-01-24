@@ -32,7 +32,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-singer-sdk = "0.42.1"
+singer-sdk = "0.44.0"
 ibm-db-sa = "0.4.1"
 sqlalchemy = "2.0.36"
 
