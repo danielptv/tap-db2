@@ -312,19 +312,18 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "faker"
-version = "35.2.0"
+version = "37.0.0"
 description = "Faker is a Python package that generates fake data for you."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "Faker-35.2.0-py3-none-any.whl", hash = "sha256:609abe555761ff31b0e5e16f958696e9b65c9224a7ac612ac96bfc2b8f09fe35"},
-    {file = "faker-35.2.0.tar.gz", hash = "sha256:28c24061780f83b45d9cb15a72b8f143b09d276c9ff52eb557744b7a89e8ba19"},
+    {file = "faker-37.0.0-py3-none-any.whl", hash = "sha256:2598f78b76710a4ed05e197dda5235be409b4c291ba5c9c7514989cfbc7a5144"},
+    {file = "faker-37.0.0.tar.gz", hash = "sha256:d2e4e2a30d459a8ec0ae52a552aa51c48973cb32cf51107dee90f58a8322a880"},
 ]
 
 [package.dependencies]
-python-dateutil = ">=2.4"
-typing-extensions = "*"
+tzdata = "*"
 
 [[package]]
 name = "filelock"
@@ -868,21 +867,6 @@ tomli = {version = ">=1", markers = "python_version < \"3.11\""}
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
-name = "python-dateutil"
-version = "2.9.0.post0"
-description = "Extensions to the standard Python datetime module"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
-groups = ["dev"]
-files = [
-    {file = "python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"},
-    {file = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"},
-]
-
-[package.dependencies]
-six = ">=1.5"
-
-[[package]]
 name = "python-dotenv"
 version = "1.0.1"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -1324,7 +1308,7 @@ version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
-groups = ["main", "dev"]
+groups = ["main"]
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
@@ -1537,6 +1521,18 @@ files = [
 ]
 
 [[package]]
+name = "tzdata"
+version = "2025.1"
+description = "Provider of IANA time zone data"
+optional = false
+python-versions = ">=2"
+groups = ["dev"]
+files = [
+    {file = "tzdata-2025.1-py2.py3-none-any.whl", hash = "sha256:7e127113816800496f027041c570f50bcd464a020098a3b6b199517772303639"},
+    {file = "tzdata-2025.1.tar.gz", hash = "sha256:24894909e88cdb28bd1636c6887801df64cb485bd593f2fd83ef29075a81d694"},
+]
+
+[[package]]
 name = "urllib3"
 version = "2.2.3"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -1599,4 +1595,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9"
-content-hash = "5c38b2f08d66ad9eab67d00c1d984d326915dbfba1c6c466b19f68b35c99572b"
+content-hash = "9b26358ee17afb96916de120c008473044e113795369dc94883f8ac715cac723"
