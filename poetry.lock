@@ -1276,14 +1276,14 @@ files = [
 
 [[package]]
 name = "singer-sdk"
-version = "0.42.1"
+version = "0.45.1"
 description = "A framework for building Singer taps"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "singer_sdk-0.42.1-py3-none-any.whl", hash = "sha256:cc588927ff87b7aea0087c57c37c85bbe95f9b7c52ebb265abb50a184cec6ad8"},
-    {file = "singer_sdk-0.42.1.tar.gz", hash = "sha256:92019c3f2e476f5c17eaa381e35d3c0ff428814587f8424149a4b28904f75ca0"},
+    {file = "singer_sdk-0.45.1-py3-none-any.whl", hash = "sha256:1f72e4a81828b574ef66a2a87a22b2345ce5848f98eb4de1d4d61e77ef4efe10"},
+    {file = "singer_sdk-0.45.1.tar.gz", hash = "sha256:f331385ace98026f7385de11e5503006f3030691c0226ad0d4864df8b0eaf332"},
 ]
 
 [package.dependencies]
@@ -1300,20 +1300,20 @@ jsonpath-ng = ">=1.5.3"
 jsonschema = ">=4.16.0"
 packaging = ">=23.1"
 python-dotenv = ">=0.20"
-PyYAML = ">=6.0"
+pyyaml = ">=6.0"
 referencing = ">=0.30.0"
 requests = ">=2.25.1"
 setuptools = "<=70.3.0"
-simpleeval = {version = ">=0.9.13,<1.0.1 || >1.0.1", markers = "python_version >= \"3.9\""}
+simpleeval = ">=0.9.13,<1.0.1 || >1.0.1"
 simplejson = ">=3.17.6"
 sqlalchemy = ">=1.4,<3.0"
 typing-extensions = ">=4.5.0"
 
 [package.extras]
-docs = ["furo (>=2024.5.6) ; python_version >= \"3.9\"", "myst-parser (>=3) ; python_version >= \"3.9\"", "pytest (>=7.2.1)", "sphinx (>=7) ; python_version >= \"3.9\"", "sphinx-copybutton (>=0.5.2) ; python_version >= \"3.9\"", "sphinx-inline-tabs (>=2023.4.21) ; python_version >= \"3.9\"", "sphinx-notfound-page (>=1.0.0) ; python_version >= \"3.9\"", "sphinx-reredirects (>=0.1.5) ; python_version >= \"3.9\""]
 faker = ["faker (>=22.5)"]
-jwt = ["PyJWT (>=2.4,<3.0)", "cryptography (>=3.4.6)"]
-parquet = ["numpy (>=1.22) ; python_version >= \"3.10\"", "numpy (>=1.22,<1.25) ; python_version == \"3.8\"", "numpy (>=1.22,<2.1) ; python_version == \"3.9\"", "pyarrow (>=13) ; python_version >= \"3.9\"", "pyarrow (>=13,<18) ; python_version == \"3.8\""]
+jwt = ["cryptography (>=3.4.6)", "pyjwt (>=2.4,<3.0)"]
+msgspec = ["msgspec (>=0.19.0)"]
+parquet = ["numpy (>=1.22)", "pyarrow (>=13)"]
 s3 = ["fs-s3fs (>=1.1.1)", "s3fs (>=2024.9.0)"]
 ssh = ["paramiko (>=3.3.0)"]
 testing = ["pytest (>=7.2.1)"]
@@ -1599,4 +1599,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9"
-content-hash = "5c38b2f08d66ad9eab67d00c1d984d326915dbfba1c6c466b19f68b35c99572b"
+content-hash = "11d3f6d4ee33c8c8a1e9a7ad40495c56f1eaef7f81a8a535809f1d74d5816aa5"
